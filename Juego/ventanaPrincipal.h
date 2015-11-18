@@ -5,6 +5,7 @@
 #include <SDL2/SDL_image.h> 
 #include <cstdlib>
 #include <string>
+#include "ventanaPartida.h"
 #define VENTANAPOS_X 0 
 #define VENTANAPOS_Y 0
 #define ANCHO_PANTALLA 640
@@ -17,6 +18,7 @@ private:
 	SDL_Surface *fondo;
 	SDL_Surface *imagenPNG[7];
 	SDL_Rect posicionIMGS[4];
+	VentanaPartida *ventanaPartida;
 public:
 	VentanaPrincipal();
 	bool inicializar();
@@ -24,6 +26,7 @@ public:
 	bool cargarImagenes();
 	SDL_Surface* cargarDifFormat(std::string ruta);
 	void pintar();
+	void mostrar();
 };
 
 #endif /*__VENTANAPRINCIPAL_H*/

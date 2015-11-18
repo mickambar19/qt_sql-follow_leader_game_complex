@@ -25,47 +25,6 @@ VentanaPrincipal::VentanaPrincipal()
 		{
 			perror("Error en cargarImagenes()");
 		}
-		else
-		{
-			bool quiereSalir = false;
-			SDL_Event e;	
-			SDL_FillRect(fondo,0,SDL_MapRGB(fondo->format,255,255,255));
-			pintar();
-			while(!quiereSalir)
-			{
-
-				while(SDL_PollEvent(&e)!=0)
-				{
-
-					if(e.type == SDL_QUIT)
-					{
-						quiereSalir = true;
-					}
-					if(e.motion.x>195 && e.motion.x<449 && e.motion.y>116 && e.motion.y<177 )
-					{
-						pintar();
-						SDL_BlitSurface(imagenPNG[INICIAR_B],NULL,fondo,&posicionIMGS[INICIAR]);
-						SDL_UpdateWindowSurface(ventana);
-						
-					}else
-					if(e.motion.x>195 && e.motion.x<449 && e.motion.y>213 && e.motion.y<277 )
-					{
-						pintar();
-						SDL_BlitSurface(imagenPNG[HISTORIAL_B],NULL,fondo,&posicionIMGS[HISTORIAL]);
-						SDL_UpdateWindowSurface(ventana);
-					}else
-					if(e.motion.x>195 && e.motion.x<449 && e.motion.y>310 && e.motion.y< 377 )
-					{
-						pintar();
-						SDL_BlitSurface(imagenPNG[MPUNTUACION_B],NULL,fondo,&posicionIMGS[MPUNTUACION]);
-						SDL_UpdateWindowSurface(ventana);
-					}else{
-						pintar();
-					}
-					
-				}							
-			}
-		}
 	}
 }
 
@@ -207,4 +166,69 @@ void VentanaPrincipal::pintar()
 	SDL_BlitSurface(imagenPNG[HISTORIAL],NULL,fondo,&posicionIMGS[HISTORIAL]);
 	SDL_BlitSurface(imagenPNG[MPUNTUACION],NULL,fondo,&posicionIMGS[MPUNTUACION]);
 	SDL_UpdateWindowSurface(ventana);
+}
+
+void VentanaPrincipal::mostrar(){
+
+			bool quiereSalir = false;
+			SDL_Event e;	
+			SDL_FillRect(fondo,0,SDL_MapRGB(fondo->format,255,255,255));
+			pintar();
+			while(!quiereSalir)
+			{
+
+				while(SDL_PollEvent(&e)!=0)
+				{
+
+					if(e.type == SDL_QUIT)
+					{
+						quiereSalir = true;
+					}
+					if(e.motion.x>195 && e.motion.x<449 && e.motion.y>116 && e.motion.y<177 )
+					{
+						pintar();
+						SDL_BlitSurface(imagenPNG[INICIAR_B],NULL,fondo,&posicionIMGS[INICIAR]);
+						SDL_UpdateWindowSurface(ventana);
+						
+					}else
+					if(e.motion.x>195 && e.motion.x<449 && e.motion.y>213 && e.motion.y<277 )
+					{
+						pintar();
+						SDL_BlitSurface(imagenPNG[HISTORIAL_B],NULL,fondo,&posicionIMGS[HISTORIAL]);
+						SDL_UpdateWindowSurface(ventana);
+					}else
+					if(e.motion.x>195 && e.motion.x<449 && e.motion.y>310 && e.motion.y< 377 )
+					{
+						pintar();
+						SDL_BlitSurface(imagenPNG[MPUNTUACION_B],NULL,fondo,&posicionIMGS[MPUNTUACION]);
+						SDL_UpdateWindowSurface(ventana);
+					}else{
+						pintar();
+					}
+					
+				}							
+			}
+}
+
+
+void VentanaPrincipal::clickEnOpcionJugar(){
+	    cout<<"e:"<<endl;
+    int numeros[15][9];
+
+    for (int i = 0; i < 15; i++)
+    {
+    	cout<<"entraste al for version 2:"<<i<<endl;
+    	for (int g = 0; g < 9; g++)
+    	{
+    		
+    		numeros[i][g] = g+1;
+    		cout<<"i:"<<i<<" g:"<<g<<" "<<g+1<<endl;
+    	}
+    }
+    VentanaPartida *ventanaPartida;
+    string nom = " YO ";
+    string opon = " Alex ";
+
+    ventanaPartida = new VentanaPartida(nom,opon,numeros);
+    ventanaPartida->jugar();
 }
