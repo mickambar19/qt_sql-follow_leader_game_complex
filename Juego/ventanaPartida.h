@@ -8,8 +8,8 @@
 #include <string>
 #include <cstring>
 #include <sstream>
-#define VENTANAPOS_X 0 
-#define VENTANAPOS_Y 0
+#define VENTANAPOS_X 100 
+#define VENTANAPOS_Y 100
 #define ANCHO_PANTALLA_PART 640
 #define ALTO_PANTALLA_PART 480
 #define SECUENCIAS_MAXIMAS 15
@@ -47,6 +47,16 @@ enum
 	VIDAS_3,
 	VIDAS_2,
 	VIDAS_1,
+	FONDO_BLANCO,
+	BOTON_INICIAR_PARTIDA,
+	BOTON_INICIAR_PARTIDA_PRESIONADO,
+	BOTON_HISTORIAL,
+	BOTON_HISTORIAL_PRESIONADO,
+	BOTON_MEJOR_PUNTUACION,
+	BOTON_MEJOR_PUNTUACION_PRESIONADO,
+	BOTON_CONECTAR,
+	BOTON_CONECTAR_PRESIONADO,
+	LINEA,
 	TOTAL
 };
 
@@ -69,6 +79,15 @@ enum
 	POSICION_FONDO_OPONENTE,
 	POSICION_FONDO_NOMBRE,
 	POSICION_FONDO_SECUENCIAS_BUENAS,
+	POSICION_BOTON_INICIAR_PARTIDA,
+	POSICION_BOTON_INICIAR_PARTIDA_PRESIONADO,
+	POSICION_BOTON_HISTORIAL,
+	POSICION_BOTON_HISTORIAL_PRESIONADO,
+	POSICION_BOTON_MEJOR_PUNTUACION,
+	POSICION_BOTON_MEJOR_PUNTUACION_PRESIONADO,
+	POSICION_LINEA,
+	POSICION_NOMBRE_INGRESADO,
+	POSICION_BOTON_CONECTAR,
 	TOTAL_POSICIONES
 };
 enum
@@ -77,6 +96,7 @@ enum
 	TEXTO_OPONENTE,
 	TEXTO_VIDAS,
 	TEXTO_SECUENCIAS_BUENAS,
+	TEXTO_INGRESO,
 	TOTAL_TEXTOS
 };
 
@@ -85,8 +105,12 @@ class VentanaPartida
 private:
 	string nombreJugador;
 	string nombreOponente;
-	SDL_Window *ventana;
-	SDL_Renderer *ventanaRender;
+	SDL_Window *ventanaJuego;
+	SDL_Window *ventanaIniciar;
+	SDL_Window *ventanaPrincipal;
+	SDL_Renderer *ventanaJuegoRender;
+	SDL_Renderer *ventanaIniciarRender;
+	SDL_Renderer *ventanaPrincipalRender;
 	SDL_Texture *fondo;
 	SDL_Texture *imagenPNG[TOTAL];
 	SDL_Rect posicionIMGS[TOTAL_POSICIONES];
@@ -101,7 +125,9 @@ private:
 	SDL_Color colorNegro;
 	SDL_Texture *textures[TOTAL_TEXTOS];
 	SDL_Surface *textSurfaces[TOTAL_TEXTOS];
+	int ventanaJuegoID;
 public:
+	VentanaPartida();
 	VentanaPartida(string nombreJ, string nombreO, int secs[][COLUMNAS_MAXIMAS]);
 	bool inicializar();
 	void cerrar();
@@ -116,7 +142,15 @@ public:
 	void pintarSecuenciasBuenas(int secuenciasBuenas);
 	void pintarVidasRestantes(int vidasRestantes);
 	int jugar();
-	void repintar();
+	void repintarVentanaJuego();
+	void pintarVentanaJuego();
+	void pintarVentanaIniciar();
+	void pintarVentanaPrincipal();
+	void obtenerSecuencias();
+	void obtenerNombreDeJugador();
+	void obtenerNombreDeOponente();
+	void mostrarVentanaIniciar();
+	void mostrarVentanaPrincipal();
 };
 
 #endif /*__VENTANAPARTIDA_H*/

@@ -1,17 +1,5 @@
 #include "ventanaPrincipal.h"
 
-enum Superficies
-{
-	TITULO,
-	INICIAR,
-	MPUNTUACION,
-	HISTORIAL,
-	INICIAR_B,
-	MPUNTUACION_B,
-	HISTORIAL_B,
-	TOTAL
-};
-
 VentanaPrincipal::VentanaPrincipal()
 {
 	//int i = 0;
@@ -26,6 +14,7 @@ VentanaPrincipal::VentanaPrincipal()
 			perror("Error en cargarImagenes()");
 		}
 	}
+	
 }
 
 bool VentanaPrincipal::inicializar()
@@ -65,14 +54,14 @@ bool VentanaPrincipal::inicializar()
 			}
 			
 		}
-		posicionIMGS[TITULO].x = 161;
-		posicionIMGS[TITULO].y = 10;
-		posicionIMGS[INICIAR].x = 192;
-		posicionIMGS[INICIAR].y = 116;
-		posicionIMGS[HISTORIAL].x = 192;
-		posicionIMGS[HISTORIAL].y = 213;
-		posicionIMGS[MPUNTUACION].x = 192;
-		posicionIMGS[MPUNTUACION].y = 310;
+		posicionIMGS[TITULO_SUPERFICIE].x = 161;
+		posicionIMGS[TITULO_SUPERFICIE].y = 10;
+		posicionIMGS[INICIAR_SUPERFICIE].x = 192;
+		posicionIMGS[INICIAR_SUPERFICIE].y = 116;
+		posicionIMGS[HISTORIAL_SUPERFICIE].x = 192;
+		posicionIMGS[HISTORIAL_SUPERFICIE].y = 213;
+		posicionIMGS[MPUNTUACION_SUPERFICIE].x = 192;
+		posicionIMGS[MPUNTUACION_SUPERFICIE].y = 310;
 
 	}
 	return exito;
@@ -81,43 +70,43 @@ bool VentanaPrincipal::cargarImagenes()
 {
 	bool exito = true;
 	
-	imagenPNG[TITULO] = cargarDifFormat("imgbtns/titulo.png");
+	imagenPNG[TITULO_SUPERFICIE] = cargarDifFormat("imgbtns/titulo.png");
 	if(imagenPNG == NULL)
 	{
 		perror("Error en cargarDifFormat");
 		exito = false;
 	}
-	imagenPNG[INICIAR] = cargarDifFormat("imgbtns/iniciar.png");
+	imagenPNG[INICIAR_SUPERFICIE] = cargarDifFormat("imgbtns/iniciar.png");
 	if(imagenPNG == NULL)
 	{
 		perror("Error en cargarDifFormat");
 		exito = false;
 	}
-	imagenPNG[MPUNTUACION] = cargarDifFormat("imgbtns/puntuacion.png");
+	imagenPNG[MPUNTUACION_SUPERFICIE] = cargarDifFormat("imgbtns/puntuacion.png");
 	if(imagenPNG == NULL)
 	{
 		perror("Error en cargarDifFormat");
 		exito = false;
 	}
-	imagenPNG[HISTORIAL] = cargarDifFormat("imgbtns/historial.png");
+	imagenPNG[HISTORIAL_SUPERFICIE] = cargarDifFormat("imgbtns/historial.png");
 	if(imagenPNG == NULL)
 	{
 		perror("Error en cargarDifFormat");
 		exito = false;
 	}
-	imagenPNG[INICIAR_B] = cargarDifFormat("imgbtns/iniciarb.png");
+	imagenPNG[INICIAR_B_SUPERFICIE] = cargarDifFormat("imgbtns/iniciarb.png");
 	if(imagenPNG == NULL)
 	{
 		perror("Error en cargarDifFormat");
 		exito = false;
 	}
-	imagenPNG[MPUNTUACION_B] = cargarDifFormat("imgbtns/puntuacionb.png");
+	imagenPNG[MPUNTUACION_B_SUPERFICIE] = cargarDifFormat("imgbtns/puntuacionb.png");
 	if(imagenPNG == NULL)
 	{
 		perror("Error en cargarDifFormat");
 		exito = false;
 	}
-	imagenPNG[HISTORIAL_B] = cargarDifFormat("imgbtns/historialb.png");
+	imagenPNG[HISTORIAL_B_SUPERFICIE] = cargarDifFormat("imgbtns/historialb.png");
 	if(imagenPNG == NULL)
 	{
 		perror("Error en cargarDifFormat");
@@ -161,10 +150,10 @@ SDL_Surface* VentanaPrincipal::cargarDifFormat(std::string ruta)
 
 void VentanaPrincipal::pintar()
 {
-	SDL_BlitSurface(imagenPNG[TITULO],NULL,fondo,&posicionIMGS[TITULO]);
-	SDL_BlitSurface(imagenPNG[INICIAR],NULL,fondo,&posicionIMGS[INICIAR]);
-	SDL_BlitSurface(imagenPNG[HISTORIAL],NULL,fondo,&posicionIMGS[HISTORIAL]);
-	SDL_BlitSurface(imagenPNG[MPUNTUACION],NULL,fondo,&posicionIMGS[MPUNTUACION]);
+	SDL_BlitSurface(imagenPNG[TITULO_SUPERFICIE],NULL,fondo,&posicionIMGS[TITULO_SUPERFICIE]);
+	SDL_BlitSurface(imagenPNG[INICIAR_SUPERFICIE],NULL,fondo,&posicionIMGS[INICIAR_SUPERFICIE]);
+	SDL_BlitSurface(imagenPNG[HISTORIAL_SUPERFICIE],NULL,fondo,&posicionIMGS[HISTORIAL_SUPERFICIE]);
+	SDL_BlitSurface(imagenPNG[MPUNTUACION_SUPERFICIE],NULL,fondo,&posicionIMGS[MPUNTUACION_SUPERFICIE]);
 	SDL_UpdateWindowSurface(ventana);
 }
 
@@ -187,32 +176,39 @@ void VentanaPrincipal::mostrar(){
 					if(e.motion.x>195 && e.motion.x<449 && e.motion.y>116 && e.motion.y<177 )
 					{
 						pintar();
-						SDL_BlitSurface(imagenPNG[INICIAR_B],NULL,fondo,&posicionIMGS[INICIAR]);
+						SDL_BlitSurface(imagenPNG[INICIAR_B_SUPERFICIE],NULL,fondo,&posicionIMGS[INICIAR_SUPERFICIE]);
 						SDL_UpdateWindowSurface(ventana);
 						
 					}else
 					if(e.motion.x>195 && e.motion.x<449 && e.motion.y>213 && e.motion.y<277 )
 					{
 						pintar();
-						SDL_BlitSurface(imagenPNG[HISTORIAL_B],NULL,fondo,&posicionIMGS[HISTORIAL]);
+						SDL_BlitSurface(imagenPNG[HISTORIAL_B_SUPERFICIE],NULL,fondo,&posicionIMGS[HISTORIAL_SUPERFICIE]);
 						SDL_UpdateWindowSurface(ventana);
 					}else
 					if(e.motion.x>195 && e.motion.x<449 && e.motion.y>310 && e.motion.y< 377 )
 					{
 						pintar();
-						SDL_BlitSurface(imagenPNG[MPUNTUACION_B],NULL,fondo,&posicionIMGS[MPUNTUACION]);
+						SDL_BlitSurface(imagenPNG[MPUNTUACION_B_SUPERFICIE],NULL,fondo,&posicionIMGS[MPUNTUACION_SUPERFICIE]);
 						SDL_UpdateWindowSurface(ventana);
 					}else{
 						pintar();
 					}
-					
+					if (e.type == SDL_MOUSEBUTTONDOWN && e.motion.x>195 && e.motion.x<449 && e.motion.y>116 && e.motion.y<177 )
+					{
+						
+						
+						clickEnOpcionJugar();
+
+					}
+
 				}							
 			}
 }
 
 
 void VentanaPrincipal::clickEnOpcionJugar(){
-	    cout<<"e:"<<endl;
+     cout<<"e:"<<endl;
     int numeros[15][9];
 
     for (int i = 0; i < 15; i++)
@@ -225,10 +221,14 @@ void VentanaPrincipal::clickEnOpcionJugar(){
     		cout<<"i:"<<i<<" g:"<<g<<" "<<g+1<<endl;
     	}
     }
-    VentanaPartida *ventanaPartida;
+    
     string nom = " YO ";
     string opon = " Alex ";
-
+    cout<<"Aqui estas"<<endl;
+    SDL_HideWindow(ventana); 
     ventanaPartida = new VentanaPartida(nom,opon,numeros);
-    ventanaPartida->jugar();
+    cout<<"qui estas2"<<endl;
+    //ventanaPartida(nom,opon,numeros);
+   ventanaPartida->jugar();
+
 }

@@ -6,11 +6,21 @@
 #include <cstdlib>
 #include <string>
 #include "ventanaPartida.h"
-#define VENTANAPOS_X 0 
-#define VENTANAPOS_Y 0
 #define ANCHO_PANTALLA 640
 #define ALTO_PANTALLA 480
 using namespace std;
+
+enum Superficies
+{
+	TITULO_SUPERFICIE,
+	INICIAR_SUPERFICIE,
+	MPUNTUACION_SUPERFICIE,
+	HISTORIAL_SUPERFICIE,
+	INICIAR_B_SUPERFICIE,
+	MPUNTUACION_B_SUPERFICIE,
+	HISTORIAL_B_SUPERFICIE,
+	TOTAL_SUPERFICIE
+};
 class VentanaPrincipal
 {
 private:
@@ -27,6 +37,7 @@ public:
 	SDL_Surface* cargarDifFormat(std::string ruta);
 	void pintar();
 	void mostrar();
+	void clickEnOpcionJugar();
 };
 
 #endif /*__VENTANAPRINCIPAL_H*/
