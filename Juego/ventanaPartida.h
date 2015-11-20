@@ -8,6 +8,18 @@
 #include <string>
 #include <cstring>
 #include <sstream>
+/*Librerias para red*/
+#include <stdio.h>
+#include <stdlib.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <sys/poll.h>
+#include <sys/time.h>
+/*---------------*/
 #define VENTANAPOS_X 100 
 #define VENTANAPOS_Y 100
 #define ANCHO_PANTALLA_PART 640
@@ -88,6 +100,9 @@ enum
 	POSICION_LINEA,
 	POSICION_NOMBRE_INGRESADO,
 	POSICION_BOTON_CONECTAR,
+	POSICION_INSTRUCCION_NOMBRE,
+	POSICION_IP,
+	POSICION_PUERTO,
 	TOTAL_POSICIONES
 };
 enum
@@ -97,12 +112,17 @@ enum
 	TEXTO_VIDAS,
 	TEXTO_SECUENCIAS_BUENAS,
 	TEXTO_INGRESO,
+	TEXTO_IP,
+	TEXTO_PUERTO,
 	TOTAL_TEXTOS
 };
 
 class VentanaPartida
 {
 private:
+	string ip_ingresada;
+	int puerto;
+	string cadena_puerto;
 	string nombreJugador;
 	string nombreOponente;
 	SDL_Window *ventanaJuego;
@@ -151,6 +171,10 @@ public:
 	void obtenerNombreDeOponente();
 	void mostrarVentanaIniciar();
 	void mostrarVentanaPrincipal();
+	void pintarNombreEnVentanaPrincipal();
+	void pintarIpIngresadaEnVentanaPrincipal();
+	void pintarPuertoIngresadoEnVentanaPrincipal();	
+	void conectar();
 };
 
 #endif /*__VENTANAPARTIDA_H*/
