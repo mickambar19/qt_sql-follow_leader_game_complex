@@ -313,19 +313,19 @@ bool VentanaPartida::inicializar()
 	posicionIMGS[POSICION_BOTON_CONECTAR].w = 250;
 	posicionIMGS[POSICION_BOTON_CONECTAR].h = 100;
 
-	posicionIMGS[POSICION_GANADOR].x=260;
-	posicionIMGS[POSICION_GANADOR].y=60;
+	posicionIMGS[POSICION_GANADOR].x=280;
+	posicionIMGS[POSICION_GANADOR].y=90;
 
-	posicionIMGS[POSICION_PUNTAJE_GANADOR].x=260;
-	posicionIMGS[POSICION_PUNTAJE_GANADOR].y=120;
+	posicionIMGS[POSICION_PUNTAJE_GANADOR].x=280;
+	posicionIMGS[POSICION_PUNTAJE_GANADOR].y=150;
 	
 	posicionIMGS[POSICION_MOTIVO_ESPERANDO].x=5;
 	posicionIMGS[POSICION_MOTIVO_ESPERANDO].y=10;
 
-	posicionIMGS[POSICION_COPA].x=20;
-	posicionIMGS[POSICION_COPA].y=20;
-	posicionIMGS[POSICION_COPA].w = 250;
-	posicionIMGS[POSICION_COPA].h = 100;
+	posicionIMGS[POSICION_COPA].x=30;
+	posicionIMGS[POSICION_COPA].y=30;
+	posicionIMGS[POSICION_COPA].w = 264;
+	posicionIMGS[POSICION_COPA].h = 387;
 
 
 	
@@ -698,6 +698,7 @@ void VentanaPartida::pintarVentanaResultados()
     
 	SDL_RenderClear(ventanaJuegoRender);
 	SDL_RenderCopy(ventanaJuegoRender,imagenPNG[FONDO_BLANCO],NULL,NULL);
+	SDL_RenderCopy(ventanaJuegoRender,imagenPNG[COPA],NULL,&posicionIMGS[POSICION_COPA]);
 	
 	textSurfaces[TEXTO_GANADOR] = TTF_RenderText_Solid(font[FONT_ORANGE_JUICE],nombreGanador.c_str(), colorNegro);
 	textures[TEXTO_GANADOR] = SDL_CreateTextureFromSurface( ventanaJuegoRender,textSurfaces[TEXTO_GANADOR]);
@@ -709,8 +710,10 @@ void VentanaPartida::pintarVentanaResultados()
 	string stringPuntaje;
 	stringPuntaje = formateado.str();
 
+	cout<<"NombreGanador"<<nombreGanador<<endl;
+	cout<<"puntajeGanador"<<puntajeGanador<<endl;
 	textSurfaces[TEXTO_PUNTAJE_GANADOR] = TTF_RenderText_Solid(font[FONT_ORANGE_JUICE],stringPuntaje.c_str(), colorNegro);
-	textures[TEXTO_PUNTAJE_GANADOR] = SDL_CreateTextureFromSurface( ventanaJuegoRender,textSurfaces[TEXTO_GANADOR]);
+	textures[TEXTO_PUNTAJE_GANADOR] = SDL_CreateTextureFromSurface( ventanaJuegoRender,textSurfaces[TEXTO_PUNTAJE_GANADOR]);
 	SDL_QueryTexture(textures[TEXTO_PUNTAJE_GANADOR],0,0,&posicionIMGS[POSICION_PUNTAJE_GANADOR].w,&posicionIMGS[POSICION_PUNTAJE_GANADOR].h);
 	SDL_RenderCopy( ventanaJuegoRender,textures[TEXTO_PUNTAJE_GANADOR],NULL,&posicionIMGS[POSICION_PUNTAJE_GANADOR]);	
 
@@ -1263,6 +1266,7 @@ void VentanaPartida::mostrarVentanaIniciar()
 						{
 							pintadoActual=5;
 							pintarVentanaResultados();
+							SDL_Delay(2000);
 						};//
 					}
 					
@@ -1306,12 +1310,17 @@ void VentanaPartida::mostrarVentanaIniciar()
 					cerrar();
 					break;
 					case SDL_KEYDOWN:
-						string cadena;
-						cadena="";
-						int opcionDeEscritura = 0;
-						bool quiereSalir = false;
-						SDL_Event e;
-						pintarVentanaIniciar();
+						switch(e.key.keysym.sym)
+							{
+								case SDLK_RETURN:
+								string cadena;
+								cadena="";
+								int opcionDeEscritura = 0;
+								bool quiereSalir = false;
+								SDL_Event e;
+								pintarVentanaIniciar();
+								break;
+							}
 					break;
 				}
 
@@ -1589,7 +1598,7 @@ int VentanaPartida::verificar(char *mensaje,int sd, struct sockaddr_in* servidor
         break;
         case '3':
             //Mandar Ganador y puntuacion viene desde el server 
-        	strncpy(nombreDeJugador,&mensaje[4],10);//aqui se refiere al ganador
+        	//strncpy(nombreDeJugador,&mensaje[4],10);//aqui se refiere al ganador
         	for (int i = 0; i < 10; ++i)
         	{
         		if(mensaje[i+4]=='0')
@@ -1601,6 +1610,7 @@ int VentanaPartida::verificar(char *mensaje,int sd, struct sockaddr_in* servidor
         		}
         		
         	}
+        	cout<<"Nombre-ganador en msj:"<<nombreDeJugador<<endl;
         	nombreGanador.assign(nombreDeJugador);
         	
         	puntajeGanador=mensaje[14];

@@ -183,9 +183,9 @@ void verificar(char *mensaje,int sd, struct sockaddr_in* clienteA)
                      mensaje[14]=secuenciasBuenas;
                         }else if(secuenciasBuenas>secuenciasBuenas2){
                          memcpy(&mensaje[4],nombreAux,sizeof(nombreAux));
-                         mensaje[14]='x';
+                         mensaje[14]=secuenciasBuenas2;
                         }else if(secuenciasBuenas<secuenciasBuenas2){
-                        mensaje[14]='x';
+                        mensaje[14]=secuenciasBuenas2;
                         }
                    
                     sendto(sd,mensaje,strlen(mensaje),0,(struct sockaddr*)&JugadoresAdd[0],sizeof(JugadoresAdd[0]));
