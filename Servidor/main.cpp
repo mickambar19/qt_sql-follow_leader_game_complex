@@ -155,7 +155,7 @@ void verificar(char *mensaje,int sd, struct sockaddr_in* clienteA)
                     jugadoresAceptados=0;
                 }else{
                     memcpy(&JugadoresAdd[jugadoresAceptados],clienteA,sizeof(*clienteA));
-                                       cout<<"Mensaje al primer cliente: " << mensaje<<endl;
+                    cout<<"Mensaje al primer cliente: " << mensaje<<endl;
                     strncpy(nombreAux,&mensaje[4],10);
                     
                     jugadoresAceptados++;

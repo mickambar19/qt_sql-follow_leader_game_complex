@@ -1563,18 +1563,23 @@ int VentanaPartida::verificar(char *mensaje,int sd, struct sockaddr_in* servidor
 				posicionActual++;
 			}
 			posicionActual=0;
-			for (int i = 4; i < 14; ++i)
+
+			for (int i = 0; i < 10; ++i)
 			{
-				if(mensaje[i]=='0')
+				if(nombreDeJugador[i]==48)
 				{
 					break;
 				}
 				else{
-				   auxNombreOponente[posicionActual]=mensaje[i];
+					cout<<"LetraDeNombre"<<nombreDeJugador[i]<<endl;
+				   auxNombreOponente[posicionActual]=nombreDeJugador[i];
 				   posicionActual++;	
 				}
 			}
+			nombreOponente="";
 			nombreOponente.assign(auxNombreOponente);
+			nombreOponente = nombreOponente.substr(0,posicionActual);
+			cout<<nombreOponente<<endl;
 			exito=1;
 			/*Verificar que secuencias esten copiadas bien*/
 		break;
