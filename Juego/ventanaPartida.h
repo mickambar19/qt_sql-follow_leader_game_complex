@@ -8,6 +8,7 @@
 #include <string>
 #include <cstring>
 #include <sstream>
+#include <fstream>
 /*Librerias para red*/
 
 #include <stdio.h>
@@ -134,6 +135,13 @@ enum
 	TEXTO_PUNTAJE_GANADOR,
 	TOTAL_TEXTOS
 };
+class Ganador {
+public:
+    char NombreJugador[20];
+    char NombreOponente[20];
+    char NombreGanador[20];
+    int puntos;
+};
 
 class VentanaPartida
 {
@@ -199,5 +207,11 @@ public:
 	int verificar(char *mensaje,int sd, struct sockaddr_in* servidorAddr);
 
 };
+
+
+
+
+
+
 
 #endif /*__VENTANAPARTIDA_H*/

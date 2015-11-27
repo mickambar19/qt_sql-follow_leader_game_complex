@@ -8,28 +8,6 @@ VentanaHistorial::VentanaHistorial(QWidget *parent) :
     ui(new Ui::VentanaHistorial)
 {
     ui->setupUi(this);
-    Ganador ganador;
-    remove("historial.txt");
-    ofstream escribir ("historial.txt", ios::app);
-    strcpy(ganador.NombreGanador,"Alex");
-    strcpy(ganador.NombreOponente,"Alan");
-    strcpy(ganador.NombreJugador,"Alex");
-    ganador.puntos=80;
-    escribir.write((char*)&ganador, sizeof(ganador));
-    strcpy(ganador.NombreGanador,"George");
-    strcpy(ganador.NombreOponente,"Gus");
-    strcpy(ganador.NombreJugador,"George");
-    ganador.puntos=130;
-
-    escribir.write((char*)&ganador, sizeof(ganador));
-    strcpy(ganador.NombreGanador,"Barton");
-    strcpy(ganador.NombreOponente,"Brokl");
-    strcpy(ganador.NombreJugador,"Barton");
-    ganador.puntos=20;
-    escribir.write((char*)&ganador, sizeof(ganador));
-
-    escribir.close();
-
     listaHistorial.CargarDatos();
     listaHistorial.Mostrar1();
     setWindowFlags(Qt::WindowTitleHint|Qt::WindowMinimizeButtonHint);

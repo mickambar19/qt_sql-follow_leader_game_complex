@@ -183,7 +183,7 @@ void verificar(char *mensaje,int sd, struct sockaddr_in* clienteA)
                      mensaje[14]=secuenciasBuenas;
                         }else if(secuenciasBuenas>secuenciasBuenas2){
                          memcpy(&mensaje[4],nombreAux,sizeof(nombreAux));
-                         mensaje[14]=secuenciasBuenas2;
+                         mensaje[14]=secuenciasBuenas;
                         }else if(secuenciasBuenas<secuenciasBuenas2){
                         mensaje[14]=secuenciasBuenas2;
                         }

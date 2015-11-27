@@ -1617,6 +1617,15 @@ int VentanaPartida::verificar(char *mensaje,int sd, struct sockaddr_in* servidor
         	cout<<"nombreGanador"<<nombreGanador<<endl;
         	cout<<"puntajeGanador"<<puntajeGanador<<endl;
         	cout<<"Mensajeenviadodeserver:"<<mensaje<<endl;
+        	Ganador g;
+        	strcpy(g.NombreJugador,nombreJugador);
+		   	strcpy(g.NombreOponente,nombreOponente);
+		    strcpy(g.NombreGanador,nombreGanador);
+		    ofstream escribir("../Historial/historial.txt",ios::app);
+		    g.puntos=puntajeGanador;	
+    		escribir.write((char*)&g, sizeof(g));
+
+    		escribir.close();
         	exito = 1;
         break;
     }    
