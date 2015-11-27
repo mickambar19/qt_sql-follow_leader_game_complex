@@ -30,17 +30,24 @@ const char *archivos[TOTAL] = {
 	"imgbtns/puntuacionb.png",
 	"imgbtns/conectar.png",
 	"imgbtns/conectarA.png",
-	"imgbtns/linea.png"
+	"imgbtns/linea.png",
+	"imgbtns/esperando.png",
+	"imgbtns/copa.png"
 };
 const char *archivosFonts[TOTAL_FONTS] = {
 	"ttf/leven/reg.ttf",
 	"ttf/maderita.ttf",
 	"ttf/bomba.TTF",
+	"ttf/orangejuice.ttf",
+	"ttf/Pacifico.ttf",
 	"ttf/orangejuice.ttf"
+
 };
 
 VentanaPartida::VentanaPartida()
 {
+	memset(&secuencias,0,sizeof(secuencias));
+	
 	//int i = 0;
 	cout<<"Aqui estas";
 	nombreJugador = "";
@@ -72,20 +79,7 @@ VentanaPartida::VentanaPartida()
 
 VentanaPartida::VentanaPartida(string nombreJ, string nombreO, int secs[][COLUMNAS_MAXIMAS])
 {
-	//int i = 0;
-	/*Se recibe la secuencia y la copiamos a la memoria de el arreglo de esta clase*/
-	for (int i = 0; i < 15; i++)
-    {
-    	cout<<"entraste al for De ventana Partida:"<<i<<endl;
-    	for (int g = 0; g < 9; g++)
-    	{
-    		
-    		
-    		cout<<"i:"<<i<<" g:"<<g<<" "<<secuencias[i][g]<<endl;
-
-    	}
-    }
-    cout<<"estas en ventanaPartida despues del for:"<<endl;
+	cout<<"estas en ventanaPartida despues del for:"<<endl;
   	numeroFila = 0;
   	numeroColumna = 0;
     vidas = 3;
@@ -117,17 +111,16 @@ VentanaPartida::VentanaPartida(string nombreJ, string nombreO, int secs[][COLUMN
 
 bool VentanaPartida::inicializar()
 {
-	
 	ventanaJuego = NULL;
 	ventanaIniciar = NULL;
 	ventanaPrincipal = NULL;
     fondo = NULL;
-	//cout<<"Estas dentro de inicializar!"<<endl;
+	
     for (int i = 0; i < TOTAL; ++i)
     {
     	imagenPNG[i]=NULL;
     }
-    //cout<<"Estas dentro de inicializar despues de for!"<<endl;
+
 	bool exito = true;
 
 	if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -138,7 +131,6 @@ bool VentanaPartida::inicializar()
 	else
 	{
 
-		
 		/*
 		* Creamos la venta Juego y su render correspondiente
 		*/
@@ -237,7 +229,7 @@ bool VentanaPartida::inicializar()
 	posicionIMGS[POSICION_NOMBRE].y = 5;
 
 
-	posicionIMGS[POSICION_SECUENCIAS_BUENAS].x = 280;
+	posicionIMGS[POSICION_SECUENCIAS_BUENAS].x = 260;
 	posicionIMGS[POSICION_SECUENCIAS_BUENAS].y = 50;
 	
 	posicionIMGS[POSICION_OPONENTE].x = 450;
@@ -249,9 +241,9 @@ bool VentanaPartida::inicializar()
 	posicionIMGS[POSICION_FONDO_NOMBRE].w = 250;
 	posicionIMGS[POSICION_FONDO_NOMBRE].h = 40;
 	
-	posicionIMGS[POSICION_FONDO_SECUENCIAS_BUENAS].x = 260;
+	posicionIMGS[POSICION_FONDO_SECUENCIAS_BUENAS].x = 250;
 	posicionIMGS[POSICION_FONDO_SECUENCIAS_BUENAS].y = 50;
-	posicionIMGS[POSICION_FONDO_SECUENCIAS_BUENAS].w = 90;
+	posicionIMGS[POSICION_FONDO_SECUENCIAS_BUENAS].w = 130;
 	posicionIMGS[POSICION_FONDO_SECUENCIAS_BUENAS].h = 40;
 
 	posicionIMGS[POSICION_FONDO_OPONENTE].x = 430;
@@ -297,17 +289,22 @@ bool VentanaPartida::inicializar()
 	posicionIMGS[POSICION_BOTON_MEJOR_PUNTUACION_PRESIONADO].w = 250;
 	posicionIMGS[POSICION_BOTON_MEJOR_PUNTUACION_PRESIONADO].h = 100;
 
+	posicionIMGS[POSICION_INGRESA_IP].x=40;
+	posicionIMGS[POSICION_INGRESA_IP].y = 250;
+
+	posicionIMGS[POSICION_INGRESA_PUERTO].x=40;
+	posicionIMGS[POSICION_INGRESA_PUERTO].y = 300;
 	
 	posicionIMGS[POSICION_INSTRUCCION_NOMBRE].x=130;
 	posicionIMGS[POSICION_INSTRUCCION_NOMBRE].y = 110;
 
-	posicionIMGS[POSICION_NOMBRE_INGRESADO].x = 150;
-	posicionIMGS[POSICION_NOMBRE_INGRESADO].y = 220;
+	posicionIMGS[POSICION_NOMBRE_INGRESADO].x = 200;
+	posicionIMGS[POSICION_NOMBRE_INGRESADO].y = 210;
 	
 
 	posicionIMGS[POSICION_LINEA].x = 150;
 	posicionIMGS[POSICION_LINEA].y = 250;
-	posicionIMGS[POSICION_LINEA].w = 250;
+	posicionIMGS[POSICION_LINEA].w = 320;
 	posicionIMGS[POSICION_LINEA].h = 10;
 	
 
@@ -315,6 +312,25 @@ bool VentanaPartida::inicializar()
 	posicionIMGS[POSICION_BOTON_CONECTAR].y = 350;
 	posicionIMGS[POSICION_BOTON_CONECTAR].w = 250;
 	posicionIMGS[POSICION_BOTON_CONECTAR].h = 100;
+
+	posicionIMGS[POSICION_GANADOR].x=260;
+	posicionIMGS[POSICION_GANADOR].y=60;
+
+	posicionIMGS[POSICION_PUNTAJE_GANADOR].x=260;
+	posicionIMGS[POSICION_PUNTAJE_GANADOR].y=120;
+	
+	posicionIMGS[POSICION_MOTIVO_ESPERANDO].x=5;
+	posicionIMGS[POSICION_MOTIVO_ESPERANDO].y=10;
+
+	posicionIMGS[POSICION_COPA].x=20;
+	posicionIMGS[POSICION_COPA].y=20;
+	posicionIMGS[POSICION_COPA].w = 250;
+	posicionIMGS[POSICION_COPA].h = 100;
+
+
+	
+	
+
 
 	return exito;
 }
@@ -386,7 +402,8 @@ SDL_Texture* VentanaPartida::cargarDifFormat(std::string ruta, SDL_Renderer *aRe
 }
 
 void VentanaPartida::pintarVentanaJuego()
-{	    
+{	 
+	pintadoActual=2;
 	//TTF_Font *font2=TTF_OpenFont("ttf/leven/reg.ttf",50);
 	//TTF_Font *font3=TTF_OpenFont("ttf/maderita.ttf",30);	
 	/*Se pinta el background ademas de el nombre de jugador*/
@@ -465,18 +482,24 @@ void VentanaPartida::pintarBoton(int aPintar)
 
 void VentanaPartida::mostrarSecuencia(int fila)
 {
+	componentesCorrecto=0;
+	numeroColumna=0;
 	int numeroEnSecuencia = 0;
 	int contador = 0;
-	while(1)
-	{
-		numeroEnSecuencia = secuencias[fila][contador];
-		if(numeroEnSecuencia==0 || contador==9)break;
-		pintarBoton(numeroEnSecuencia);
-		SDL_Delay(300);
-		contador++;
-		cout<<"mostrarSecuencia() numeroEnSecuencia:"<<numeroEnSecuencia<<endl;
+	cout<<"Entraste en mostrar secuencias\n\n\n";
+	while(1){
+		if(secuencias[fila][contador]!=0)
+		{
+			pintarBoton(secuencias[fila][contador]);
+			SDL_Delay(700);
+			contador++;
+		}else
+		{
+			break;
+		}
 	}
 	componentesEnSecuencia[fila] = contador;
+
 	cout<<"mostrarSecuencia() componentesEnSecuencia:"<<contador<<endl;
 }
 
@@ -546,6 +569,7 @@ void VentanaPartida::pintarRespuestaIncorrecta(int aPintar){
 		break;
 	}
 	SDL_RenderPresent( ventanaJuegoRender);
+	SDL_Delay(200);
 }
 
 bool VentanaPartida::cargarFuentes()
@@ -555,13 +579,23 @@ bool VentanaPartida::cargarFuentes()
 	//SDL_RenderClear( ventanaJuegoRender);
 	for (int i = 0; i < TOTAL_FONTS; ++i)
 	{
-		font[i] = TTF_OpenFont(archivosFonts[i],50);
-		if(font[i] == NULL){
-		cout<<"huboerror";
-		exito = false;
+		if(i==FONT_MADERITA)
+		{
+			font[i] = TTF_OpenFont(archivosFonts[i],30);
+		}else if(i==FONT_ORANGE_JUICE_PEQUE)
+		{
+			font[i] = TTF_OpenFont(archivosFonts[i],25);
+		}else
+		{
+			font[i] = TTF_OpenFont(archivosFonts[i],50);	
+		}
+		
+		if(font[i] == NULL)
+		{
+			cout<<"huboerror";
+			exito = false;
 		}
 	}
-
 	cout<<"Salio:cargarFuentes";
     return exito;
 }
@@ -573,17 +607,13 @@ void VentanaPartida::pintarSecuenciasBuenas(int secuenciasBuenas)
 	stringstream secuenciasBuenasFromateado;
 	string secuenciasBuenasString;
 	string palabraSecuencias ="S#: ";
-	
 	secuenciasBuenasFromateado<<secuenciasBuenas;
 	secuenciasBuenasString = secuenciasBuenasFromateado.str();
 	secuenciasBuenasString = palabraSecuencias + secuenciasBuenasString;
 	cout<<secuenciasBuenasString<<endl;
-
 	textSurfaces[TEXTO_SECUENCIAS_BUENAS] = TTF_RenderText_Solid(font[FONT_ORANGE_JUICE],secuenciasBuenasString.c_str(), colorNegro);
 	textures[TEXTO_SECUENCIAS_BUENAS] = SDL_CreateTextureFromSurface( ventanaJuegoRender,textSurfaces[TEXTO_SECUENCIAS_BUENAS]);
-
 	SDL_RenderCopy( ventanaJuegoRender,imagenPNG[FONDO_SECUENCIAS_BUENAS],NULL,&posicionIMGS[FONDO_SECUENCIAS_BUENAS]);
-
 	SDL_QueryTexture(textures[TEXTO_SECUENCIAS_BUENAS],0,0,&posicionIMGS[POSICION_SECUENCIAS_BUENAS].w,&posicionIMGS[POSICION_SECUENCIAS_BUENAS].h);
 	SDL_RenderCopy( ventanaJuegoRender,textures[TEXTO_SECUENCIAS_BUENAS],NULL,&posicionIMGS[POSICION_SECUENCIAS_BUENAS]);
 	SDL_RenderPresent( ventanaJuegoRender);
@@ -599,274 +629,39 @@ void VentanaPartida::pintarVidasRestantes(int vidasRestantes)
 			/*Pendiente: que mostrar cuando pierda*/
 			break;
 		case 1:
-			
 			SDL_RenderCopy( ventanaJuegoRender,imagenPNG[VIDAS_1],NULL,&posicionIMGS[POSICION_VIDAS]);
 			SDL_RenderPresent( ventanaJuegoRender);
 			break;
 		case 2:
-			
 			SDL_RenderCopy( ventanaJuegoRender,imagenPNG[VIDAS_2],NULL,&posicionIMGS[POSICION_VIDAS]);
 			SDL_RenderPresent( ventanaJuegoRender);
 			break;
 		case 3:
-			
 			SDL_RenderCopy( ventanaJuegoRender,imagenPNG[VIDAS_3],NULL,&posicionIMGS[POSICION_VIDAS]);
 			SDL_RenderPresent( ventanaJuegoRender);
 			break;
-
 	}
 	cout<<"Salir de pintarVidasRestantes()\n";
 }
 
-int VentanaPartida::jugar()
-{
-	
-	
-	bool quiereSalir = false;
-	SDL_Event e;	
-
-    vidas=3;
-	pintarVentanaJuego();
-	cout<<vidas<<endl;
-	
-	mostrarSecuencia(numeroFila);
-	pintarVidasRestantes(vidas);
-	componentesCorrecto = 0;
-	
-	while(quiereSalir == false)
-	{
-		while(SDL_PollEvent(&e))
-		{
-			switch(e.type)
-			{
-				case SDL_QUIT:
-					quiereSalir = true;
-					cout<<"Presiono quit\n";
-					cerrar();
-					cout<<quiereSalir<<endl;
-					break;
-				case SDL_KEYDOWN:
-					switch(e.key.keysym.sym)
-					{
-						case SDLK_1:
-							if(secuencias[numeroFila][numeroColumna]==BTN1)
-							{
-								pintarRespuestaCorrecta(BTN1);
-								numeroColumna++;
-								componentesCorrecto++;
-								
-							}
-							else
-							{
-								pintarRespuestaIncorrecta(BTN1);
-								vidas--;
-								numeroFila++;
-								pintarVidasRestantes(vidas);
-								 //SDL_Delay(2000);
-								 repintarVentanaJuego();
-								mostrarSecuencia(numeroFila);;
-
-							}
-						break;
-						case SDLK_2:
-							if(secuencias[numeroFila][numeroColumna]==BTN2)
-							{
-								pintarRespuestaCorrecta(BTN2);
-								numeroColumna++;
-								componentesCorrecto++;
-								
-							}
-							else
-							{
-								pintarRespuestaIncorrecta(BTN2);
-								vidas--;
-								pintarVidasRestantes(vidas);
-								 //SDL_Delay(2000);
-								 repintarVentanaJuego();
-								mostrarSecuencia(numeroFila);
-							}
-						break;
-						case SDLK_3:
-							if(secuencias[numeroFila][numeroColumna]==BTN3)
-							{
-								pintarRespuestaCorrecta(BTN3);
-								numeroColumna++;
-								componentesCorrecto++;
-								
-							}
-							else
-							{
-								pintarRespuestaIncorrecta(BTN3);
-								vidas--;
-								pintarVidasRestantes(vidas);
-								 //SDL_Delay(2000);
-								 repintarVentanaJuego();
-								mostrarSecuencia(numeroFila);
-							}
-						break;
-						case SDLK_4:
-							if(secuencias[numeroFila][numeroColumna]==BTN4)
-							{
-								pintarRespuestaCorrecta(BTN4);
-								numeroColumna++;
-								componentesCorrecto++;
-								
-							}
-							else
-							{
-								pintarRespuestaIncorrecta(BTN4);
-								vidas--;
-								pintarVidasRestantes(vidas);
-								 //SDL_Delay(2000);
-								 repintarVentanaJuego();
-								mostrarSecuencia(numeroFila);
-							}
-						break;
-						case SDLK_5:
-							if(secuencias[numeroFila][numeroColumna]==BTN5)
-							{
-								pintarRespuestaCorrecta(BTN5);
-								numeroColumna++;
-								componentesCorrecto++;
-								
-							}
-							else
-							{
-								pintarRespuestaIncorrecta(BTN5);
-								vidas--;
-								pintarVidasRestantes(vidas);
-								 //SDL_Delay(2000);
-								 repintarVentanaJuego();
-								mostrarSecuencia(numeroFila);
-							}
-						break;
-						case SDLK_6:
-							if(secuencias[numeroFila][numeroColumna]==BTN6)
-							{
-								pintarRespuestaCorrecta(BTN6);
-								numeroColumna++;
-								componentesCorrecto++;
-								
-							}
-							else
-							{
-								pintarRespuestaIncorrecta(BTN6);
-								vidas--;
-								pintarVidasRestantes(vidas);
-								 //SDL_Delay(2000);
-								 repintarVentanaJuego();
-								mostrarSecuencia(numeroFila);
-							}
-						break;
-						case SDLK_7:
-							if(secuencias[numeroFila][numeroColumna]==BTN7)
-							{
-								pintarRespuestaCorrecta(BTN7);
-								numeroColumna++;
-								componentesCorrecto++;
-								
-							}
-							else
-							{
-								pintarRespuestaIncorrecta(BTN7);
-								vidas--;
-								pintarVidasRestantes(vidas);
-								 //SDL_Delay(2000);
-								 repintarVentanaJuego();
-								mostrarSecuencia(numeroFila);
-							}
-						break;
-						case SDLK_8:
-							if(secuencias[numeroFila][numeroColumna]==BTN8)
-							{
-								pintarRespuestaCorrecta(BTN8);
-								numeroColumna++;
-								componentesCorrecto++;
-								
-							}
-							else
-							{
-								pintarRespuestaIncorrecta(BTN8);
-								vidas--;
-								pintarVidasRestantes(vidas);
-								 //SDL_Delay(2000);
-								 repintarVentanaJuego();
-								mostrarSecuencia(numeroFila);
-							}
-						break;
-						case SDLK_9:
-							if(secuencias[numeroFila][numeroColumna]==BTN9)
-							{
-								pintarRespuestaCorrecta(BTN9);
-								numeroColumna++;
-								componentesCorrecto++;
-								
-							}
-							else
-							{
-								pintarRespuestaIncorrecta(BTN9);
-								vidas--;
-								pintarVidasRestantes(vidas);
-								 //SDL_Delay(2000);
-								 repintarVentanaJuego();
-								mostrarSecuencia(numeroFila);
-							}
-						break;
-					}
-
-			}
-			if (componentesCorrecto == componentesEnSecuencia[numeroFila])
-			{
-				cout<<"componentesCorrecto="<<componentesCorrecto<<endl;
-				componentesCorrecto=0;
-				/*
-					Se supone que si el jugador ya siguio la 
-					secuencia  ejemplo: secuencia [0] ->  1 4 3 6
-					tiene como numero de componentes 4
-					si el jugador ya tiene en su componentesCorrecto 4 ya tiene una secuencia completa
-				*/
-				cout<<"secuenciasCorrectas="<<secuenciasCorrectas<<endl;
-				secuenciasCorrectas++;
-				 repintarVentanaJuego();
-				pintarSecuenciasBuenas(secuenciasCorrectas);
-				numeroFila++;	
-				mostrarSecuencia(numeroFila);
-			}
-		}		
-								
-	}
-	return secuenciasCorrectas;
-}
-
 void VentanaPartida::repintarVentanaJuego()
 {	    
-	//TTF_Font *font2=TTF_OpenFont("ttf/leven/reg.ttf",50);
-	//TTF_Font *font3=TTF_OpenFont("ttf/maderita.ttf",30);	
-	/*Se pinta el background ademas de el nombre de jugador*/
 	
 	SDL_RenderCopy( ventanaJuegoRender,imagenPNG[FONDO],NULL,NULL);
 	SDL_RenderCopy( ventanaJuegoRender,imagenPNG[FONDO_NOMBRE],NULL,&posicionIMGS[POSICION_FONDO_NOMBRE]);
 	SDL_RenderCopy( ventanaJuegoRender,imagenPNG[FONDO_OPONENTE],NULL,&posicionIMGS[POSICION_FONDO_OPONENTE]);
 	SDL_RenderCopy( ventanaJuegoRender,imagenPNG[FONDO_SECUENCIAS_BUENAS],NULL,&posicionIMGS[POSICION_FONDO_SECUENCIAS_BUENAS]);
 
-	//SDL_Surface *surface = TTF_RenderText_Solid(font2,"Alexis Miguel", color2);
-	//SDL_Texture *text2 = SDL_CreateTextureFromSurface( ventanaJuegoRender,surface);
 	cout<<"valor de font:"<<((void*)font[FONT_LEVEN])<<endl;
 	cout<<"valor de font:"<<((void*)font[FONT_MADERITA])<<endl;
 	textSurfaces[TEXTO_OPONENTE] = TTF_RenderText_Solid(font[FONT_MADERITA],nombreOponente.c_str(), colorNegro);
 	textSurfaces[TEXTO_NOMBRE] = TTF_RenderText_Solid(font[FONT_MADERITA],nombreJugador.c_str(), colorNegro);
-	//textSurfaces[TEXTO_SECUENCIAS_BUENAS] = TTF_RenderText_Solid(font[FONT_ORANGE_JUICE],"0", colorNegro);
-
+	
 	textures[TEXTO_NOMBRE] = SDL_CreateTextureFromSurface( ventanaJuegoRender,textSurfaces[TEXTO_NOMBRE]);
 	textures[TEXTO_OPONENTE] = SDL_CreateTextureFromSurface( ventanaJuegoRender,textSurfaces[TEXTO_OPONENTE]);
-	//textures[TEXTO_SECUENCIAS_BUENAS] = SDL_CreateTextureFromSurface( ventanaJuegoRender,textSurfaces[TEXTO_SECUENCIAS_BUENAS]);
-
-	//SDL_QueryTexture(textJugador,0,0,&posicionIMGS[TITULO].w,&posicionIMGS[TITULO].h);
-	//SDL_RenderCopy( ventanaJuegoRender,textJugador,NULL,&posicionIMGS[TITULO]);	
-
+	
 	SDL_QueryTexture(textures[TEXTO_OPONENTE],0,0,&posicionIMGS[POSICION_OPONENTE].w,&posicionIMGS[POSICION_OPONENTE].h);
 	SDL_RenderCopy( ventanaJuegoRender,textures[TEXTO_OPONENTE],NULL,&posicionIMGS[POSICION_OPONENTE]);	
-
 	SDL_QueryTexture(textures[TEXTO_NOMBRE],0,0,&posicionIMGS[POSICION_NOMBRE].w,&posicionIMGS[POSICION_NOMBRE].h);
 	SDL_RenderCopy( ventanaJuegoRender,textures[TEXTO_NOMBRE],NULL,&posicionIMGS[POSICION_NOMBRE]);
 
@@ -876,34 +671,18 @@ void VentanaPartida::repintarVentanaJuego()
 	pintarSecuenciasBuenas(secuenciasCorrectas);
 }
 
-void VentanaPartida::obtenerSecuencias(){
-
- 	for (int i = 0; i < 15; i++)
-    {
-    	cout<<"entraste al for version 2:"<<i<<endl;
-    	for (int g = 0; g < 9; g++)
-    	{
-    		
-    		secuencias[i][g] = g+1;
-    		cout<<"i:"<<i<<" g:"<<g<<" "<<g+1<<endl;
-    	}
-    }
-    
-}
-
 void VentanaPartida::obtenerNombreDeJugador(){
-	nombreJugador = "Alexis";
+	
 }
 
 void VentanaPartida::obtenerNombreDeOponente(){
-	nombreOponente = "Jordano";
+	
 }
 
 void VentanaPartida::pintarVentanaIniciar()
 {	    
-	//TTF_Font *font2=TTF_OpenFont("ttf/leven/reg.ttf",50);
-	//TTF_Font *font3=TTF_OpenFont("ttf/maderita.ttf",30);	
-	/*Se pinta el background ademas de el nombre de jugador*/
+	pintadoActual=0;
+	
 	SDL_RenderClear(ventanaJuegoRender);
 	SDL_RenderCopy(ventanaJuegoRender,imagenPNG[FONDO_BLANCO],NULL,NULL);
 	SDL_RenderCopy(ventanaJuegoRender,imagenPNG[TITULO],NULL,&posicionIMGS[POSICION_TITULO]);
@@ -912,409 +691,673 @@ void VentanaPartida::pintarVentanaIniciar()
 	SDL_RenderCopy(ventanaJuegoRender,imagenPNG[BOTON_MEJOR_PUNTUACION],NULL,&posicionIMGS[POSICION_BOTON_MEJOR_PUNTUACION]);
 	SDL_RenderPresent(ventanaJuegoRender);
     
-	//SDL_Surface *surface = TTF_RenderText_Solid(font2,"Alexis Miguel", color2);
-	//SDL_Texture *text2 = SDL_CreateTextureFromSurface(ventanaRender,surface);
-	//cout<<"valor de font:"<<((void*)font[FONT_LEVEN])<<endl;
+}
+void VentanaPartida::pintarVentanaResultados()
+{	    
 	
+    
+	SDL_RenderClear(ventanaJuegoRender);
+	SDL_RenderCopy(ventanaJuegoRender,imagenPNG[FONDO_BLANCO],NULL,NULL);
+	
+	textSurfaces[TEXTO_GANADOR] = TTF_RenderText_Solid(font[FONT_ORANGE_JUICE],nombreGanador.c_str(), colorNegro);
+	textures[TEXTO_GANADOR] = SDL_CreateTextureFromSurface( ventanaJuegoRender,textSurfaces[TEXTO_GANADOR]);
+	SDL_QueryTexture(textures[TEXTO_GANADOR],0,0,&posicionIMGS[POSICION_GANADOR].w,&posicionIMGS[POSICION_GANADOR].h);
+	SDL_RenderCopy( ventanaJuegoRender,textures[TEXTO_GANADOR],NULL,&posicionIMGS[POSICION_GANADOR]);	
+
+	stringstream formateado;
+	formateado<<puntajeGanador;
+	string stringPuntaje;
+	stringPuntaje = formateado.str();
+
+	textSurfaces[TEXTO_PUNTAJE_GANADOR] = TTF_RenderText_Solid(font[FONT_ORANGE_JUICE],stringPuntaje.c_str(), colorNegro);
+	textures[TEXTO_PUNTAJE_GANADOR] = SDL_CreateTextureFromSurface( ventanaJuegoRender,textSurfaces[TEXTO_GANADOR]);
+	SDL_QueryTexture(textures[TEXTO_PUNTAJE_GANADOR],0,0,&posicionIMGS[POSICION_PUNTAJE_GANADOR].w,&posicionIMGS[POSICION_PUNTAJE_GANADOR].h);
+	SDL_RenderCopy( ventanaJuegoRender,textures[TEXTO_PUNTAJE_GANADOR],NULL,&posicionIMGS[POSICION_PUNTAJE_GANADOR]);	
+
+	SDL_RenderPresent(ventanaJuegoRender);
 }
 
 void VentanaPartida::mostrarVentanaIniciar()
 {
+	
+	string cadena;
+	cadena="";
+	int opcionDeEscritura = 0;
 	bool quiereSalir = false;
 	SDL_Event e;	
 	pintarVentanaIniciar();
 	while(!quiereSalir)
 	{
-
 		while(SDL_PollEvent(&e)!=0)
 		{
+			/*Iniciar*/
+			if(pintadoActual==0)
+			{
+				if(e.type == SDL_QUIT)
+				{
+					quiereSalir = true;
+				}
+				if(e.motion.x>195 && e.motion.x<449 && e.motion.y>116 && e.motion.y<177 )
+				{
+					pintarVentanaIniciar();
+					SDL_RenderCopy(ventanaJuegoRender,imagenPNG[BOTON_INICIAR_PARTIDA_PRESIONADO],NULL,&posicionIMGS[POSICION_BOTON_INICIAR_PARTIDA_PRESIONADO]);
+					SDL_RenderPresent(ventanaJuegoRender);
+					
+				}else
+				if(e.motion.x>195 && e.motion.x<449 && e.motion.y>213 && e.motion.y<277 )
+				{
+					pintarVentanaIniciar();
+					SDL_RenderCopy(ventanaJuegoRender,imagenPNG[BOTON_HISTORIAL_PRESIONADO],NULL,&posicionIMGS[POSICION_BOTON_HISTORIAL_PRESIONADO]);
+					SDL_RenderPresent(ventanaJuegoRender);
+				}else
+				if(e.motion.x>195 && e.motion.x<449 && e.motion.y>310 && e.motion.y< 377 )
+				{
+					pintarVentanaIniciar();
+					SDL_RenderCopy(ventanaJuegoRender,imagenPNG[BOTON_MEJOR_PUNTUACION_PRESIONADO],NULL,&posicionIMGS[POSICION_BOTON_MEJOR_PUNTUACION_PRESIONADO]);
+					SDL_RenderPresent(ventanaJuegoRender);
+				}else{
+					pintarVentanaIniciar();
+				}
+				if (e.type == SDL_MOUSEBUTTONDOWN && e.motion.x>195 && e.motion.x<449 && e.motion.y>116 && e.motion.y<177 )
+				{
+					pintarVentanaPrincipal();
+				}
+				if (e.type == SDL_MOUSEBUTTONDOWN && e.motion.x>195 && e.motion.x<449 && e.motion.y>213 && e.motion.y<277 )
+				{
+					cerrar();
+					system("./Historial");
 
-			if(e.type == SDL_QUIT)
-			{
-				quiereSalir = true;
+				}
 			}
-			if(e.motion.x>195 && e.motion.x<449 && e.motion.y>116 && e.motion.y<177 )
+
+			/*Fin de Iniciar*/			
+			/*Principal*/
+			if(pintadoActual==1)
 			{
-				pintarVentanaIniciar();
-				SDL_RenderCopy(ventanaJuegoRender,imagenPNG[BOTON_INICIAR_PARTIDA_PRESIONADO],NULL,&posicionIMGS[POSICION_BOTON_INICIAR_PARTIDA_PRESIONADO]);
-				SDL_RenderPresent(ventanaJuegoRender);
+				switch(e.type)
+				{
+					case SDL_QUIT:
+
+					break;
+
+					case SDL_KEYDOWN:
+						if(opcionDeEscritura==0)
+						{
+							cout<<"Presionastes algo"<<endl;
+							switch(e.key.keysym.sym)
+							{
+								case SDLK_a:
+									cout<<"a";
+									cadena+="a";
+								break;
+								case SDLK_b:
+									cout<<"b";
+									cadena+="b";
+								break;
+								case SDLK_c:
+									cout<<"c";
+									cadena+="c";
+								break;
+								case SDLK_d:
+									cout<<"d";
+									cadena+="d";
+								break;
+								case SDLK_e:
+									cout<<"e";
+									cadena+="e";
+								break;
+								case SDLK_f:
+									cout<<"f";
+									cadena+="f";
+								break;
+								case SDLK_g:
+									cout<<"g";
+									cadena+="g";					
+								break;
+								case SDLK_h:
+								cout<<"h";
+									cadena+="h";
+								break;
+								case SDLK_i:
+								cout<<"i";
+									cadena+="i";
+								break;
+								case SDLK_j:
+								cout<<"j";
+									cadena+="j";
+								break;
+								case SDLK_k:
+								cout<<"k";
+									cadena+="k";
+								break;
+								case SDLK_l:
+								cout<<"l";
+									cadena+="l";
+								break;
+								case SDLK_m:
+								cout<<"m";
+									cadena+="m";
+								break;
+								case SDLK_n:
+								cout<<"n";
+									cadena+="n";
+								break;
+								case SDLK_o:
+								cout<<"o";
+									cadena+="o";
+								break;
+								case SDLK_p:
+								cout<<"p";
+									cadena+="p";
+								break;
+								case SDLK_q:
+								cout<<"q";
+									cadena+="q";
+								break;
+								case SDLK_r:
+								cout<<"r";
+									cadena+="r";
+								break;
+								case SDLK_s:
+								cout<<"s";
+									cadena+="s";
+								break;
+								case SDLK_t:
+								cout<<"t";
+									cadena+="t";
+								break;
+								case SDLK_u:
+								cout<<"u";
+									cadena+="u";
+								break;
+								case SDLK_v:
+								cout<<"v";
+									cadena+="v";
+								break;
+								case SDLK_w:
+								cout<<"w";
+									cadena+="w";
+								break;
+								case SDLK_x:
+								cout<<"x";
+									cadena+="x";
+								break;
+								case SDLK_y:
+								cout<<"y";
+									cadena+="y";
+								break;
+								case SDLK_z:
+								cout<<"z";
+									cadena+="z";
+								break;
+								case SDLK_BACKSPACE:
+									cout<<"seRegreso\n\n";
+									cadena = cadena.substr(0,cadena.length()-1);
+								break;
+								case SDLK_RETURN:
+									opcionDeEscritura++;
+									cout<<"PresionasteEnter\n";
+									cadena = "";
+									break;
+
+							}
+							if(opcionDeEscritura==0){
+							nombreJugador = cadena;
+							pintarVentanaPrincipal();	
+							}
+							
+						}else if(opcionDeEscritura == 1)//ip
+						{
+							cout<<"Presionastes algo para tu IP"<<endl;
+							switch(e.key.keysym.sym)
+							{
+								case SDLK_PERIOD:
+									cout<<".";
+									cadena+=".";
+								break;
+								case SDLK_0:
+									cout<<"0";
+									cadena+="0";
+								break;
+								case SDLK_1:
+									cout<<"1";
+									cadena+="1";
+								break;
+								case SDLK_2:
+									cout<<"2";
+									cadena+="2";
+								break;
+								case SDLK_3:
+									cout<<"3";
+									cadena+="3";
+								break;
+								case SDLK_4:
+									cout<<"4";
+									cadena+="4";
+								break;
+								case SDLK_5:
+									cout<<"5";
+									cadena+="5";					
+								break;
+								case SDLK_6:
+								cout<<"6";
+									cadena+="6";
+								break;
+								case SDLK_7:
+								cout<<"7";
+									cadena+="7";
+								break;
+								case SDLK_8:
+								cout<<"8";
+									cadena+="8";
+								break;
+								case SDLK_9:
+								cout<<"9";
+									cadena+="9";
+								break;
+								case SDLK_BACKSPACE:
+									cout<<"seRegreso\n\n";
+									cadena = cadena.substr(0,cadena.length()-1);
+								break;
+								case SDLK_RETURN:
+									opcionDeEscritura++;		
+									cout<<"PresionasteEnter\n";
+									cadena="";
+								break;					
+							}
+							if(opcionDeEscritura==1)
+							{
+							ip_ingresada = cadena;
+							pintarVentanaPrincipal();	
+							}
+						}else if(opcionDeEscritura == 2)//puerto
+						{
+							cout<<"Presionastes algo para tu Puerto"<<endl;
+							switch(e.key.keysym.sym)
+							{
+								case SDLK_PERIOD:
+									cout<<".";
+									cadena+=".";
+								break;
+								case SDLK_0:
+									cout<<"0";
+									cadena+="0";
+								break;
+								case SDLK_1:
+									cout<<"1";
+									cadena+="1";
+								break;
+								case SDLK_2:
+									cout<<"2";
+									cadena+="2";
+								break;
+								case SDLK_3:
+									cout<<"3";
+									cadena+="3";
+								break;
+								case SDLK_4:
+									cout<<"4";
+									cadena+="4";
+								break;
+								case SDLK_5:
+									cout<<"5";
+									cadena+="5";					
+								break;
+								case SDLK_6:
+								cout<<"6";
+									cadena+="6";
+								break;
+								case SDLK_7:
+								cout<<"7";
+									cadena+="7";
+								break;
+								case SDLK_8:
+								cout<<"8";
+									cadena+="8";
+								break;
+								case SDLK_9:
+								cout<<"9";
+									cadena+="9";
+								break;		
+								case SDLK_BACKSPACE:
+									cout<<"seRegreso";
+									cadena = cadena.substr(0,cadena.length()-1);
+								break;
+								case SDLK_RETURN:
+									opcionDeEscritura++;
+									puerto = atoi(cadena.c_str());
+									cadena="";
+								break;					
+							}
+							if(opcionDeEscritura==2){
+							cadena_puerto=cadena;
+							pintarVentanaPrincipal();	
+							}
+							if(opcionDeEscritura==3)
+							{
+								pintarVentanaEsperar(1);
+								if(mandarBCC()<0)
+								{
+									quiereSalir=true;
+								}else
+								{
+									pintadoActual=2;
+									
+									vidas=3;
+									cout<<vidas<<endl;
+									componentesCorrecto = 0;
+									numeroFila=0;
+									numeroColumna=0;
+									pintarVentanaJuego();
+									mostrarSecuencia(numeroFila);
+									pintarVidasRestantes(vidas);
+								}
+							}
+						}
+
+					break;
+				}
+
+				if(e.type == SDL_QUIT)
+				{
+					quiereSalir = true;
 				
-			}else
-			if(e.motion.x>195 && e.motion.x<449 && e.motion.y>213 && e.motion.y<277 )
-			{
-				pintarVentanaIniciar();
-				SDL_RenderCopy(ventanaJuegoRender,imagenPNG[BOTON_HISTORIAL_PRESIONADO],NULL,&posicionIMGS[POSICION_BOTON_HISTORIAL_PRESIONADO]);
-				SDL_RenderPresent(ventanaJuegoRender);
-			}else
-			if(e.motion.x>195 && e.motion.x<449 && e.motion.y>310 && e.motion.y< 377 )
-			{
-				pintarVentanaIniciar();
-				SDL_RenderCopy(ventanaJuegoRender,imagenPNG[BOTON_MEJOR_PUNTUACION_PRESIONADO],NULL,&posicionIMGS[POSICION_BOTON_MEJOR_PUNTUACION_PRESIONADO]);
-				SDL_RenderPresent(ventanaJuegoRender);
-			}else{
-				pintarVentanaIniciar();
+				}
 			}
-			if (e.type == SDL_MOUSEBUTTONDOWN && e.motion.x>195 && e.motion.x<449 && e.motion.y>116 && e.motion.y<177 )
+			/*Fin de Principal*/
+
+			/*Inicio de Jugar*/
+			if(pintadoActual==2)
 			{
-				mostrarVentanaPrincipal();
+				switch(e.type)
+				{
+					case SDL_QUIT:
+						quiereSalir = true;
+						cout<<"Presiono quit\n";
+						cerrar();
+						cout<<quiereSalir<<endl;
+						break;
+					case SDL_KEYDOWN:
+						switch(e.key.keysym.sym)
+						{
+							case SDLK_1:
+								if(secuencias[numeroFila][numeroColumna]==BTN1)
+								{
+									pintarRespuestaCorrecta(BTN1);
+									numeroColumna++;
+									componentesCorrecto++;
+								}
+								else
+								{
+									pintarRespuestaIncorrecta(BTN1);
+									vidas--;
+									
+									numeroFila++;
+									
+									pintarVidasRestantes(vidas);
+									//SDL_Delay(2000);
+						            repintarVentanaJuego();
+									mostrarSecuencia(numeroFila);
+								}
+							break;
+							case SDLK_2:
+								if(secuencias[numeroFila][numeroColumna]==BTN2)
+								{
+									pintarRespuestaCorrecta(BTN2);
+									numeroColumna++;
+									componentesCorrecto++;
+									
+								}
+								else
+								{
+									pintarRespuestaIncorrecta(BTN2);
+									vidas--;
+									pintarVidasRestantes(vidas);
+									 //SDL_Delay(2000);
+									numeroFila++;
+									repintarVentanaJuego();
+									mostrarSecuencia(numeroFila);
+								}
+							break;
+							case SDLK_3:
+								if(secuencias[numeroFila][numeroColumna]==BTN3)
+								{
+									pintarRespuestaCorrecta(BTN3);
+									numeroColumna++;
+									componentesCorrecto++;
+									
+								}
+								else
+								{
+									pintarRespuestaIncorrecta(BTN3);
+									vidas--;
+									numeroFila++;
+									pintarVidasRestantes(vidas);
+									 //SDL_Delay(2000);
+									repintarVentanaJuego();
+									mostrarSecuencia(numeroFila);
+								}
+							break;
+							case SDLK_4:
+								if(secuencias[numeroFila][numeroColumna]==BTN4)
+								{
+									pintarRespuestaCorrecta(BTN4);
+									numeroColumna++;
+									componentesCorrecto++;
+									
+								}
+								else
+								{
+									pintarRespuestaIncorrecta(BTN4);
+									vidas--;
+									numeroFila++;
+									pintarVidasRestantes(vidas);
+									 //SDL_Delay(2000);
+									repintarVentanaJuego();
+									mostrarSecuencia(numeroFila);
+								}
+							break;
+							case SDLK_5:
+								if(secuencias[numeroFila][numeroColumna]==BTN5)
+								{
+									pintarRespuestaCorrecta(BTN5);
+									numeroColumna++;
+									componentesCorrecto++;
+									
+								}
+								else
+								{
+									pintarRespuestaIncorrecta(BTN5);
+									vidas--;
+									numeroFila++;
+									pintarVidasRestantes(vidas);
+									 //SDL_Delay(2000);
+									repintarVentanaJuego();
+									mostrarSecuencia(numeroFila);
+								}
+							break;
+							case SDLK_6:
+								if(secuencias[numeroFila][numeroColumna]==BTN6)
+								{
+									pintarRespuestaCorrecta(BTN6);
+									numeroColumna++;
+									componentesCorrecto++;
+									
+								}
+								else
+								{
+									pintarRespuestaIncorrecta(BTN6);
+									vidas--;
+									numeroFila++;
+									pintarVidasRestantes(vidas);
+									 //SDL_Delay(2000);
+									repintarVentanaJuego();
+									mostrarSecuencia(numeroFila);
+								}
+							break;
+							case SDLK_7:
+								if(secuencias[numeroFila][numeroColumna]==BTN7)
+								{
+									pintarRespuestaCorrecta(BTN7);
+									numeroColumna++;
+									componentesCorrecto++;
+									
+								}
+								else
+								{
+									pintarRespuestaIncorrecta(BTN7);
+									vidas--;
+									numeroFila++;
+									pintarVidasRestantes(vidas);
+									 //SDL_Delay(2000);
+									repintarVentanaJuego();
+									mostrarSecuencia(numeroFila);
+								}
+							break;
+							case SDLK_8:
+								if(secuencias[numeroFila][numeroColumna]==BTN8)
+								{
+									pintarRespuestaCorrecta(BTN8);
+									numeroColumna++;
+									componentesCorrecto++;
+									
+								}
+								else
+								{
+									pintarRespuestaIncorrecta(BTN8);
+									vidas--;
+									numeroFila++;
+									pintarVidasRestantes(vidas);
+									 //SDL_Delay(2000);
+									repintarVentanaJuego();
+									mostrarSecuencia(numeroFila);
+								}
+							break;
+							case SDLK_9:
+								if(secuencias[numeroFila][numeroColumna]==BTN9)
+								{
+									pintarRespuestaCorrecta(BTN9);
+									numeroColumna++;
+									componentesCorrecto++;
+									
+								}
+								else
+								{
+									pintarRespuestaIncorrecta(BTN9);
+									vidas--;
+									numeroFila++;
+									pintarVidasRestantes(vidas);
+									 //SDL_Delay(2000);
+									repintarVentanaJuego();
+									mostrarSecuencia(numeroFila);
+								}
+							break;
+						}
+					if(vidas==0 ||secuenciasCorrectas==SECUENCIAS_MAXIMAS-1)
+					{
+						cout<<"secuenciasCorrectas Sin vidas="<<secuenciasCorrectas<<endl;
+						cout<<"Tus vidas se acabaron";
+						pintadoActual=4;
+						pintarVentanaEsperar(2);
+						if(mandarBSB()>0)
+						{
+							pintadoActual=5;
+							pintarVentanaResultados();
+						};//
+					}
+					
+					if(componentesCorrecto == componentesEnSecuencia[numeroFila])
+					{
+						cout<<"componentesCorrecto="<<componentesCorrecto<<endl;
+
+						componentesCorrecto=0;
+						/*
+							Se supone que si el jugador ya siguio la 
+							secuencia  ejemplo: secuencia [0] ->  1 4 3 6
+							tiene como numero de componentes 4
+							si el jugador ya tiene en su componentesCorrecto 4 ya tiene una secuencia completa
+						*/
+						cout<<"secuenciasCorrectas="<<secuenciasCorrectas<<endl;
+						secuenciasCorrectas++;
+						repintarVentanaJuego();
+						pintarSecuenciasBuenas(secuenciasCorrectas);
+						numeroFila++;	
+						mostrarSecuencia(numeroFila);
+					}
+
+				}
+				
 			}
-		}							
+			if(pintadoActual==4)
+			{
+				switch(e.type)
+				{
+					case SDL_QUIT:
+					cerrar();
+					break;
+				}
+
+			}
+			if(pintadoActual==5)
+			{
+				switch(e.type)
+				{
+					case SDL_QUIT:
+					cerrar();
+					break;
+					case SDL_KEYDOWN:
+						string cadena;
+						cadena="";
+						int opcionDeEscritura = 0;
+						bool quiereSalir = false;
+						SDL_Event e;
+						pintarVentanaIniciar();
+					break;
+				}
+
+			}
+		}
+		/*Fin de Jugar*/
 	}
 }
 
 
 void VentanaPartida::pintarVentanaPrincipal()
 {	    
-	//TTF_Font *font2=TTF_OpenFont("ttf/leven/reg.ttf",50);
-	//TTF_Font *font3=TTF_OpenFont("ttf/maderita.ttf",30);	
 	/*Se pinta el background ademas de el nombre de jugador*/
-
+	pintadoActual=1;
 	SDL_RenderClear(ventanaJuegoRender);
-	textSurfaces[TEXTO_INGRESO] = TTF_RenderText_Solid(font[FONT_MADERITA],"Ingresa tu nombre:", colorNegro);
+	textSurfaces[TEXTO_INGRESO] = TTF_RenderText_Solid(font[FONT_PACIFICO],"Ingresa tu nombre:", colorNegro);
 	textures[TEXTO_INGRESO] = SDL_CreateTextureFromSurface( ventanaJuegoRender,textSurfaces[TEXTO_INGRESO]);
 	SDL_QueryTexture(textures[TEXTO_INGRESO],0,0,&posicionIMGS[POSICION_INSTRUCCION_NOMBRE].w,&posicionIMGS[POSICION_INSTRUCCION_NOMBRE].h);
-	
-
-	
+ 	cout<<"Vamos en ip";
+	textSurfaces[TEXTO_INGRESA_IP] = TTF_RenderText_Solid(font[FONT_PACIFICO],"IP:", colorNegro);
+	textures[TEXTO_INGRESA_IP] = SDL_CreateTextureFromSurface( ventanaJuegoRender,textSurfaces[TEXTO_INGRESA_IP]);
+	SDL_QueryTexture(textures[TEXTO_INGRESA_IP],0,0,&posicionIMGS[POSICION_INGRESA_IP].w,&posicionIMGS[POSICION_INGRESA_IP].h);
+	cout<<"Vamos en puerto";	
+	textSurfaces[TEXTO_INGRESA_PUERTO] = TTF_RenderText_Solid(font[FONT_PACIFICO],"Puerto:", colorNegro);
+	textures[TEXTO_INGRESA_PUERTO] = SDL_CreateTextureFromSurface( ventanaJuegoRender,textSurfaces[TEXTO_INGRESA_PUERTO]);
+	SDL_QueryTexture(textures[TEXTO_INGRESA_PUERTO],0,0,&posicionIMGS[POSICION_INGRESA_PUERTO].w,&posicionIMGS[POSICION_INGRESA_PUERTO].h);
 	SDL_RenderCopy(ventanaJuegoRender,imagenPNG[FONDO_BLANCO],NULL,NULL);
 	SDL_RenderCopy(ventanaJuegoRender,imagenPNG[TITULO],NULL,&posicionIMGS[POSICION_TITULO]);
 	SDL_RenderCopy(ventanaJuegoRender,imagenPNG[LINEA],NULL,&posicionIMGS[POSICION_LINEA]);
-	SDL_RenderCopy(ventanaJuegoRender,imagenPNG[BOTON_CONECTAR],NULL,&posicionIMGS[POSICION_BOTON_CONECTAR]);
 	SDL_RenderCopy( ventanaJuegoRender,textures[TEXTO_INGRESO],NULL,&posicionIMGS[POSICION_INSTRUCCION_NOMBRE]);
-	SDL_RenderPresent(ventanaJuegoRender);
-  
-	//SDL_Surface *surface = TTF_RenderText_Solid(font2,"Alexis Miguel", color2);
-	//SDL_Texture *text2 = SDL_CreateTextureFromSurface(ventanaRender,surface);
-	//cout<<"valor de font:"<<((void*)font[FONT_LEVEN])<<endl;
-	
+	SDL_RenderCopy( ventanaJuegoRender,textures[TEXTO_INGRESA_IP],NULL,&posicionIMGS[POSICION_INGRESA_IP]);
+	SDL_RenderCopy( ventanaJuegoRender,textures[TEXTO_INGRESA_PUERTO],NULL,&posicionIMGS[POSICION_INGRESA_PUERTO]);
+	pintarNombreEnVentanaPrincipal();
+	pintarIpIngresadaEnVentanaPrincipal();
+	pintarPuertoIngresadoEnVentanaPrincipal();
+	SDL_RenderPresent(ventanaJuegoRender);	
 }
 
-void VentanaPartida::mostrarVentanaPrincipal()
-{
-	bool quiereSalir = false;
-	SDL_Event e;	
-	string cadena;
-	cadena="";
-	int opcionDeEscritura = 0;
-	pintarVentanaPrincipal();
-	while(!quiereSalir)
-	{
-
-		while(SDL_PollEvent(&e)!=0)
-		{
-			switch(e.type)
-			{
-				case SDL_QUIT:
-
-				break;
-
-				case SDL_KEYDOWN:
-					if(opcionDeEscritura==0)
-					{
-						cout<<"Presionastes algo"<<endl;
-						switch(e.key.keysym.sym)
-						{
-							case SDLK_a:
-								cout<<"a";
-								cadena+="a";
-							break;
-							case SDLK_b:
-								cout<<"b";
-								cadena+="b";
-							break;
-							case SDLK_c:
-								cout<<"c";
-								cadena+="c";
-							break;
-							case SDLK_d:
-								cout<<"d";
-								cadena+="d";
-							break;
-							case SDLK_e:
-								cout<<"e";
-								cadena+="e";
-							break;
-							case SDLK_f:
-								cout<<"f";
-								cadena+="f";
-							break;
-							case SDLK_g:
-								cout<<"g";
-								cadena+="g";					
-							break;
-							case SDLK_h:
-							cout<<"h";
-								cadena+="h";
-							break;
-							case SDLK_i:
-							cout<<"i";
-								cadena+="i";
-							break;
-							case SDLK_j:
-							cout<<"j";
-								cadena+="j";
-							break;
-							case SDLK_k:
-							cout<<"k";
-								cadena+="k";
-							break;
-							case SDLK_l:
-							cout<<"l";
-								cadena+="l";
-							break;
-							case SDLK_m:
-							cout<<"m";
-								cadena+="m";
-							break;
-							case SDLK_n:
-							cout<<"n";
-								cadena+="n";
-							break;
-							case SDLK_o:
-							cout<<"o";
-								cadena+="o";
-							break;
-							case SDLK_p:
-							cout<<"p";
-								cadena+="p";
-							break;
-							case SDLK_q:
-							cout<<"q";
-								cadena+="q";
-							break;
-							case SDLK_r:
-							cout<<"r";
-								cadena+="r";
-							break;
-							case SDLK_s:
-							cout<<"s";
-								cadena+="s";
-							break;
-							case SDLK_t:
-							cout<<"t";
-								cadena+="t";
-							break;
-							case SDLK_u:
-							cout<<"u";
-								cadena+="u";
-							break;
-							case SDLK_v:
-							cout<<"v";
-								cadena+="v";
-							break;
-							case SDLK_w:
-							cout<<"w";
-								cadena+="w";
-							break;
-							case SDLK_x:
-							cout<<"x";
-								cadena+="x";
-							break;
-							case SDLK_y:
-							cout<<"y";
-								cadena+="y";
-							break;
-							case SDLK_z:
-							cout<<"z";
-								cadena+="z";
-							break;
-							case SDLK_RETURN:
-								opcionDeEscritura++;
-								cout<<"PresionasteEnter\n";
-								cadena = "";
-								break;
-
-						}
-						if(opcionDeEscritura==0){
-						nombreJugador = cadena;
-						pintarNombreEnVentanaPrincipal();	
-						}
-						
-					}else if(opcionDeEscritura == 1)//ip
-					{
-						cout<<"Presionastes algo para tu IP"<<endl;
-						switch(e.key.keysym.sym)
-						{
-							case SDLK_PERIOD:
-								cout<<".";
-								cadena+=".";
-							break;
-							case SDLK_0:
-								cout<<"0";
-								cadena+="0";
-							break;
-							case SDLK_1:
-								cout<<"1";
-								cadena+="1";
-							break;
-							case SDLK_2:
-								cout<<"2";
-								cadena+="2";
-							break;
-							case SDLK_3:
-								cout<<"3";
-								cadena+="3";
-							break;
-							case SDLK_4:
-								cout<<"4";
-								cadena+="4";
-							break;
-							case SDLK_5:
-								cout<<"5";
-								cadena+="5";					
-							break;
-							case SDLK_6:
-							cout<<"6";
-								cadena+="6";
-							break;
-							case SDLK_7:
-							cout<<"7";
-								cadena+="7";
-							break;
-							case SDLK_8:
-							cout<<"8";
-								cadena+="8";
-							break;
-							case SDLK_9:
-							cout<<"9";
-								cadena+="9";
-							break;		
-							case SDLK_RETURN:
-								opcionDeEscritura++;		
-								cout<<"PresionasteEnter\n";
-								cadena="";
-							break;					
-						}
-						if(opcionDeEscritura==1)
-						{
-						ip_ingresada = cadena;
-						pintarIpIngresadaEnVentanaPrincipal();	
-						}
-					}else if(opcionDeEscritura == 2)//puerto
-					{
-						cout<<"Presionastes algo para tu Puerto"<<endl;
-						switch(e.key.keysym.sym)
-						{
-							case SDLK_PERIOD:
-								cout<<".";
-								cadena+=".";
-							break;
-							case SDLK_0:
-								cout<<"0";
-								cadena+="0";
-							break;
-							case SDLK_1:
-								cout<<"1";
-								cadena+="1";
-							break;
-							case SDLK_2:
-								cout<<"2";
-								cadena+="2";
-							break;
-							case SDLK_3:
-								cout<<"3";
-								cadena+="3";
-							break;
-							case SDLK_4:
-								cout<<"4";
-								cadena+="4";
-							break;
-							case SDLK_5:
-								cout<<"5";
-								cadena+="5";					
-							break;
-							case SDLK_6:
-							cout<<"6";
-								cadena+="6";
-							break;
-							case SDLK_7:
-							cout<<"7";
-								cadena+="7";
-							break;
-							case SDLK_8:
-							cout<<"8";
-								cadena+="8";
-							break;
-							case SDLK_9:
-							cout<<"9";
-								cadena+="9";
-							break;		
-							case SDLK_RETURN:
-								opcionDeEscritura++;
-								puerto = atoi(cadena.c_str());
-								cadena="";
-							break;					
-						}
-						if(opcionDeEscritura==2){
-						cadena_puerto=cadena;
-						pintarPuertoIngresadoEnVentanaPrincipal();	
-						}
-						if(opcionDeEscritura==3)
-						{
-							conectar();
-						}
-					}
-
-				break;
-			}
-
-			if(e.type == SDL_QUIT)
-			{
-				quiereSalir = true;
-			}
-			/*if(e.motion.x>195 && e.motion.x<449 && e.motion.y>116 && e.motion.y<177 )
-			{
-				pintarVentanaIniciar();
-				SDL_RenderCopy(ventanaJuegoRender,imagenPNG[BOTON_INICIAR_PARTIDA_PRESIONADO],NULL,&posicionIMGS[POSICION_BOTON_INICIAR_PARTIDA_PRESIONADO]);
-				SDL_RenderPresent(ventanaJuegoRender);
-				
-			}else
-			if(e.motion.x>195 && e.motion.x<449 && e.motion.y>213 && e.motion.y<277 )
-			{
-				pintarVentanaIniciar();
-				SDL_RenderCopy(ventanaJuegoRender,imagenPNG[BOTON_HISTORIAL_PRESIONADO],NULL,&posicionIMGS[POSICION_BOTON_HISTORIAL_PRESIONADO]);
-				SDL_RenderPresent(ventanaJuegoRender);
-			}else
-			if(e.motion.x>195 && e.motion.x<449 && e.motion.y>310 && e.motion.y< 377 )
-			{
-				pintarVentanaIniciar();
-				SDL_RenderCopy(ventanaJuegoRender,imagenPNG[BOTON_MEJOR_PUNTUACION_PRESIONADO],NULL,&posicionIMGS[POSICION_BOTON_MEJOR_PUNTUACION_PRESIONADO]);
-				SDL_RenderPresent(ventanaJuegoRender);
-			}else{
-				pintarVentanaIniciar();
-			}
-			if (e.type == SDL_MOUSEBUTTONDOWN && e.motion.x>195 && e.motion.x<449 && e.motion.y>116 && e.motion.y<177 )
-			{
-				jugar();
-			}*/
-		}							
-	}
-}
 
 void VentanaPartida::pintarNombreEnVentanaPrincipal()
-{	    
-	//TTF_Font *font2=TTF_OpenFont("ttf/leven/reg.ttf",50);
-	//TTF_Font *font3=TTF_OpenFont("ttf/maderita.ttf",30);	
-	/*Se pinta el background ademas de el nombre de jugador*/
-	
-	
+{	 
 
-	//SDL_Surface *surface = TTF_RenderText_Solid(font2,"Alexis Miguel", color2);
-	//SDL_Texture *text2 = SDL_CreateTextureFromSurface( ventanaJuegoRender,surface);
 	cout<<"valor de font:"<<((void*)font[FONT_LEVEN])<<endl;
 	cout<<"valor de font:"<<((void*)font[FONT_MADERITA])<<endl;
-
 	textSurfaces[TEXTO_NOMBRE] = TTF_RenderText_Solid(font[FONT_ORANGE_JUICE],nombreJugador.c_str(), colorNegro);
-	
-	//textSurfaces[TEXTO_SECUENCIAS_BUENAS] = TTF_RenderText_Solid(font[FONT_ORANGE_JUICE],"0", colorNegro);
-
 	textures[TEXTO_NOMBRE] = SDL_CreateTextureFromSurface( ventanaJuegoRender,textSurfaces[TEXTO_NOMBRE]);
-	
-	//textures[TEXTO_SECUENCIAS_BUENAS] = SDL_CreateTextureFromSurface( ventanaJuegoRender,textSurfaces[TEXTO_SECUENCIAS_BUENAS]);
-
-	//SDL_QueryTexture(textJugador,0,0,&posicionIMGS[TITULO].w,&posicionIMGS[TITULO].h);
-	//SDL_RenderCopy( ventanaJuegoRender,textJugador,NULL,&posicionIMGS[TITULO]);	
-
 	SDL_QueryTexture(textures[TEXTO_NOMBRE],0,0,&posicionIMGS[POSICION_NOMBRE_INGRESADO].w,&posicionIMGS[POSICION_NOMBRE_INGRESADO].h);
 	SDL_RenderCopy( ventanaJuegoRender,textures[TEXTO_NOMBRE],NULL,&posicionIMGS[POSICION_NOMBRE_INGRESADO]);	
 	SDL_RenderPresent(ventanaJuegoRender);
@@ -1322,29 +1365,12 @@ void VentanaPartida::pintarNombreEnVentanaPrincipal()
 }
 void VentanaPartida::pintarIpIngresadaEnVentanaPrincipal()
 {	    
-	//TTF_Font *font2=TTF_OpenFont("ttf/leven/reg.ttf",50);
-	//TTF_Font *font3=TTF_OpenFont("ttf/maderita.ttf",30);	
-	/*Se pinta el background ademas de el nombre de jugador*/
-	
-	
-
-	//SDL_Surface *surface = TTF_RenderText_Solid(font2,"Alexis Miguel", color2);
-	//SDL_Texture *text2 = SDL_CreateTextureFromSurface( ventanaJuegoRender,surface);
 	cout<<"valor de font:"<<((void*)font[FONT_LEVEN])<<endl;
 	cout<<"valor de font:"<<((void*)font[FONT_MADERITA])<<endl;
-     posicionIMGS[POSICION_IP].x=100;
-     posicionIMGS[POSICION_IP].y=270;
+    posicionIMGS[POSICION_IP].x=200;
+    posicionIMGS[POSICION_IP].y=280;
 	textSurfaces[TEXTO_IP] = TTF_RenderText_Solid(font[FONT_ORANGE_JUICE],ip_ingresada.c_str(), colorNegro);
-	
-	//textSurfaces[TEXTO_SECUENCIAS_BUENAS] = TTF_RenderText_Solid(font[FONT_ORANGE_JUICE],"0", colorNegro);
-
 	textures[TEXTO_IP] = SDL_CreateTextureFromSurface( ventanaJuegoRender,textSurfaces[TEXTO_IP]);
-	
-	//textures[TEXTO_SECUENCIAS_BUENAS] = SDL_CreateTextureFromSurface( ventanaJuegoRender,textSurfaces[TEXTO_SECUENCIAS_BUENAS]);
-
-	//SDL_QueryTexture(textJugador,0,0,&posicionIMGS[TITULO].w,&posicionIMGS[TITULO].h);
-	//SDL_RenderCopy( ventanaJuegoRender,textJugador,NULL,&posicionIMGS[TITULO]);	
-
 	SDL_QueryTexture(textures[TEXTO_IP],0,0,&posicionIMGS[POSICION_IP].w,&posicionIMGS[POSICION_IP].h);
 	SDL_RenderCopy( ventanaJuegoRender,textures[TEXTO_IP],NULL,&posicionIMGS[POSICION_IP]);	
 	SDL_RenderPresent(ventanaJuegoRender);
@@ -1352,127 +1378,306 @@ void VentanaPartida::pintarIpIngresadaEnVentanaPrincipal()
 }
 void VentanaPartida::pintarPuertoIngresadoEnVentanaPrincipal()
 {	    
-	//TTF_Font *font2=TTF_OpenFont("ttf/leven/reg.ttf",50);
-	//TTF_Font *font3=TTF_OpenFont("ttf/maderita.ttf",30);	
-	/*Se pinta el background ademas de el nombre de jugador*/
-	posicionIMGS[POSICION_PUERTO].x=100;
-    posicionIMGS[POSICION_PUERTO].y=320;	
-	
-
-	//SDL_Surface *surface = TTF_RenderText_Solid(font2,"Alexis Miguel", color2);
-	//SDL_Texture *text2 = SDL_CreateTextureFromSurface( ventanaJuegoRender,surface);
+	posicionIMGS[POSICION_PUERTO].x=200;
+    posicionIMGS[POSICION_PUERTO].y=340;	
 	cout<<"valor de font:"<<((void*)font[FONT_LEVEN])<<endl;
 	cout<<"valor de font:"<<((void*)font[FONT_MADERITA])<<endl;
-
-
 	textSurfaces[TEXTO_PUERTO] = TTF_RenderText_Solid(font[FONT_ORANGE_JUICE],cadena_puerto.c_str(), colorNegro);
-	
-	//textSurfaces[TEXTO_SECUENCIAS_BUENAS] = TTF_RenderText_Solid(font[FONT_ORANGE_JUICE],"0", colorNegro);
-
 	textures[TEXTO_PUERTO] = SDL_CreateTextureFromSurface( ventanaJuegoRender,textSurfaces[TEXTO_PUERTO]);
-	
-	//textures[TEXTO_SECUENCIAS_BUENAS] = SDL_CreateTextureFromSurface( ventanaJuegoRender,textSurfaces[TEXTO_SECUENCIAS_BUENAS]);
-
-	//SDL_QueryTexture(textJugador,0,0,&posicionIMGS[TITULO].w,&posicionIMGS[TITULO].h);
-	//SDL_RenderCopy( ventanaJuegoRender,textJugador,NULL,&posicionIMGS[TITULO]);	
-
 	SDL_QueryTexture(textures[TEXTO_PUERTO],0,0,&posicionIMGS[POSICION_PUERTO].w,&posicionIMGS[POSICION_PUERTO].h);
 	SDL_RenderCopy( ventanaJuegoRender,textures[TEXTO_PUERTO],NULL,&posicionIMGS[POSICION_PUERTO]);	
 	SDL_RenderPresent(ventanaJuegoRender);
-	
 }
-void VentanaPartida::conectar()
+void VentanaPartida::pintarVentanaEsperar(int tipo)
 {
-	int sockfd;
-	int res;
-	//int numpuerto;
-	char buffer[256];
+	SDL_RenderClear(ventanaJuegoRender);
+	SDL_RenderCopy(ventanaJuegoRender,imagenPNG[FONDO_ESPERANDO],NULL,NULL);
+	cout<<"Tipo de esperar"<<tipo<<endl;
+	switch(tipo)
+	{
+		case 1:
+		textSurfaces[TEXTO_MOTIVO_ESPERANDO] = TTF_RenderText_Solid(font[FONT_ORANGE_JUICE_PEQUE],"Esperando secuencias y oponente...", colorNegro);
+		textures[TEXTO_MOTIVO_ESPERANDO] = SDL_CreateTextureFromSurface( ventanaJuegoRender,textSurfaces[TEXTO_MOTIVO_ESPERANDO]);
+		SDL_QueryTexture(textures[TEXTO_MOTIVO_ESPERANDO],0,0,&posicionIMGS[POSICION_MOTIVO_ESPERANDO].w,&posicionIMGS[POSICION_MOTIVO_ESPERANDO].h);
+		SDL_RenderCopy( ventanaJuegoRender,textures[TEXTO_MOTIVO_ESPERANDO],NULL,&posicionIMGS[POSICION_MOTIVO_ESPERANDO]);	
+
+		break;
+		case 2:
+		textSurfaces[TEXTO_MOTIVO_ESPERANDO] = TTF_RenderText_Solid(font[FONT_ORANGE_JUICE_PEQUE],"Esperando ganador...", colorNegro);
+		textures[TEXTO_MOTIVO_ESPERANDO] = SDL_CreateTextureFromSurface( ventanaJuegoRender,textSurfaces[TEXTO_MOTIVO_ESPERANDO]);
+		SDL_QueryTexture(textures[TEXTO_MOTIVO_ESPERANDO],0,0,&posicionIMGS[POSICION_MOTIVO_ESPERANDO].w,&posicionIMGS[POSICION_MOTIVO_ESPERANDO].h);
+		SDL_RenderCopy( ventanaJuegoRender,textures[TEXTO_MOTIVO_ESPERANDO],NULL,&posicionIMGS[POSICION_MOTIVO_ESPERANDO]);	
+		break;
+	}
+
+	
+	
+	SDL_RenderPresent(ventanaJuegoRender);
+
+}
+
+/*Funciones para conectar con el servidor y demas*/
+int VentanaPartida::mandarBCC()
+{
+	int fd_socket;
 	struct sockaddr_in cliente;
-	//string ip_ingresada;
-	unsigned int total;
-	struct pollfd revisar;
-	struct timeval inicio, fin;
-	struct hostent *estructHostent;
-	/*Primero llamar a la funcion socket()*/
-	sockfd = socket(AF_INET, SOCK_STREAM,0);
-	if(sockfd < 0)
+	struct sockaddr_in servidorAddr;
+	int rc;
+	char buffer[512],server[256];
+	socklen_t add_size;
+	add_size = sizeof cliente;
+	strcpy(server,ip_ingresada.c_str());
+	cout<<"IP ingresada"<<server<<endl;
+	fd_socket = socket(AF_INET,SOCK_DGRAM,0);
+	if(fd_socket < 0)
 	{
-		perror("No se abrio socket correctamente");
-		exit(1);
+		perror("Error en cuncion socket()");
+		return -1;
 	}
-	/*Inicializar la estructura de el socket*/
-	//bzero((char *)&cliente, sizeof(cliente)); MEMSET
-	memset(&cliente,0,sizeof(struct sockaddr_in));
-
-
-	/*Cambiar ip a binario y luego a cuanto equivale*/
-	cout<<"Ingresa la IP a la que se quiere conectar:\n";
-	cout<<ip_ingresada<<endl;
-	cout<<"Ingresa el numero de puerto:\n";
-    cout<<puerto<<endl;
 	
-	estructHostent = gethostbyname(ip_ingresada.c_str());
 
-	memcpy(&cliente.sin_addr.s_addr,estructHostent->h_addr,estructHostent->h_length);
+	inet_pton(AF_INET,server,&cliente.sin_addr.s_addr);
+	cliente.sin_family=AF_INET;
+	cliente.sin_port=htons (2432);
 
-	cliente.sin_family = AF_INET;
-	cliente.sin_port = htons(puerto);
-
-	
-	cout<<"Este es puerto del servidor al que el cliente se quiere conectar:"<<cliente.sin_port<<endl;
-	res = connect (sockfd, (struct sockaddr *)&cliente, sizeof(cliente));
-	if(res<0)
+	memset(&buffer,0,sizeof(buffer));
+	strcat(buffer,"AJR");//NombreProto
+	strcat(buffer,"0");
+	strcat(buffer,nombreJugador.c_str());
+	for (int i = 0; i < (10-nombreJugador.length()); ++i)
 	{
-		//existe erro con la funcion connect
-		perror( "Esto ocurrio:");
+		strcat(buffer,"0");
 	}
-	gettimeofday(&inicio,NULL);
-	revisar.fd = sockfd;
-	revisar.events = POLLIN;
-	int revent;
-	do{
+	strcat(buffer,"0");//secuencias buenas
 	
-		revent =  poll(&revisar, 1, 50);
-		gettimeofday(&fin,NULL);
-		//checar re-eventos
-		if (revent == -1) {
-			 perror("algo fallo con poll"); // error occurred in poll()
-			 break;
-		} 
-		else if (revent == 0) 
-		{
-			 // no hay nada que leer.
-		} 
-		else 
-		{
-			 //checar eventos en revisar:
-			if (revisar.revents & POLLIN) 
+
+
+	sendto (fd_socket, buffer, strlen(buffer), 0, (struct sockaddr *) &cliente, sizeof (cliente));
+	
+	rc=recvfrom(fd_socket,buffer, TAM_BUFFER, 0, (struct sockaddr *) &servidorAddr,&add_size);
+	buffer[rc-1]='\0';
+    if (rc<0)
+    {
+        perror("Error funcion recvfrom");
+        return -1;
+    }	
+	  
+	
+    
+
+    cout<<"Buffer recibido:"<<buffer<<endl;
+    int status;
+    status = verificar(buffer, fd_socket, &servidorAddr);    
+    if(rc<0)
+    {
+
+        perror("Error funcion sendto");
+        return -1;
+    }
+ 
+    if(fd_socket!=-1)
+    {
+        close(fd_socket);
+    }
+    return status;
+
+}
+
+int VentanaPartida::verificar(char *mensaje,int sd, struct sockaddr_in* servidorAddr)
+{
+
+	int exito = -1;
+    cout<<"Este es el mensj"<<mensaje<<endl;
+    cout<<"mensaje en pos 3:"<<mensaje[3]<<endl;
+    /*
+    *  AJR      -0-2      NombreProto
+    *  #          -3      Bandera
+    *  char*    -4-13     NombreJ
+    *  #          -14     SucecionesBuenas
+    *  int**      -15->    Secuencias 
+    */
+    char nombreProtocolo[3];
+    char banderasEnMensaje;
+    char nombreDeJugador[10];
+    char sucesionesBuenas;
+    char auxNombreOponente[10];
+
+    strncpy(nombreProtocolo,mensaje,3);
+    banderasEnMensaje=mensaje[3];
+    
+    sucesionesBuenas = mensaje[14];
+    
+    nombreDeJugador[10]='\0';
+    cout<<"Nom:"<<nombreProtocolo<<endl;
+    cout<<"banderasEnMensaje:"<<banderasEnMensaje<<endl;
+    cout<<"nombreDeJugador:"<<nombreDeJugador<<endl;
+    cout<<"sucesionesBuenas:"<<sucesionesBuenas<<endl;
+    cout<<"mensaje:"<<mensaje<<endl;
+    
+   	int posicionActual=15;
+   	int enteroDChar;
+
+    switch(banderasEnMensaje)
+    {
+        case '0':    
+            //Guardar la ip del que se conecto        
+        break;
+        case '1':
+            //Ya tenemos jugador vas a JUGAR Las secuencias estan en el mensaje
+        	strncpy(nombreDeJugador,&mensaje[4],10);
+        	memset(&secuencias,0,sizeof(secuencias));
+        	cout<<"NombreQue mandoServidor"<<nombreDeJugador<<endl;
+        	cout << "Datos del server:\n" << mensaje << endl;
+			cout<<"Secuencias obtenidas del servidor"<<endl;
+			for (int i = 14; i < strlen(mensaje); ++i)
 			{
-				int n = read(sockfd, buffer, sizeof(buffer)); // receive normal data
-			if(n>0)
-				cout<<buffer<<endl;
-			} 
-			else if (revisar.revents & POLLHUP) 
-			{
-				//Dispositivo ha sido desconectado
-				perror("Disp Dec");
-				cout<<"Disp Dec2";
-			
-			}else
-			{
-				break;
+				if (mensaje[i]=='\0')
+				{
+					break;
+				}
+				cout<<(int)mensaje[i]-'0'<<"#";
+				cout<<mensaje[i]<<" ";
 			}
+			cout<<endl<<"Aqui se copian\n";
+			posicionActual=14;
 
-		}
-			
-		/*if(duracion(inicio,fin) >= 500000){
-		 cout<<".";
-		 cout.flush();
-       	gettimeofday(&inicio,NULL);
-		}*/
+			for (int i = 0; i < SECUENCIAS_MAXIMAS; i++)
+			{
+				cout<<"fila"<<i<<":";
+				for (int j = 0; j < COLUMNAS_MAXIMAS; j++)
+				{
+					
+					if (mensaje[posicionActual]!='0')
+					{
+						
+						enteroDChar=(int)mensaje[posicionActual]-'0';
+						secuencias[i][j]=enteroDChar;
+						cout<<secuencias[i][j]<<" ";	
+						//cout<<(int)mensaje[posicionActual]-'0'<<" ";	
+						posicionActual++;
+					}
+
+
+				}
+				cout<<endl;
+				posicionActual++;
+			}
+			posicionActual=0;
+			for (int i = 4; i < 14; ++i)
+			{
+				if(mensaje[i]=='0')
+				{
+					break;
+				}
+				else{
+				   auxNombreOponente[posicionActual]=mensaje[i];
+				   posicionActual++;	
+				}
+			}
+			nombreOponente.assign(auxNombreOponente);
+			exito=1;
+			/*Verificar que secuencias esten copiadas bien*/
+		break;
+        case '2':
+            //Fin de Juego sacarle secuenciasBuenas
+
+        break;
+        case '3':
+            //Mandar Ganador y puntuacion viene desde el server 
+        	strncpy(nombreDeJugador,&mensaje[4],10);//aqui se refiere al ganador
+        	for (int i = 0; i < 10; ++i)
+        	{
+        		if(mensaje[i+4]=='0')
+        		{
+        			break;
+        		}else
+        		{
+					nombreDeJugador[i] = mensaje[i+4];
+        		}
+        		
+        	}
+        	nombreGanador.assign(nombreDeJugador);
+        	
+        	puntajeGanador=mensaje[14];
+        	cout<<"nombreGanador"<<nombreGanador<<endl;
+        	cout<<"puntajeGanador"<<puntajeGanador<<endl;
+        	cout<<"Mensajeenviadodeserver:"<<mensaje<<endl;
+        	exito = 1;
+        break;
+    }    
+    
+    return exito;
+}
+
+int VentanaPartida::mandarBSB()
+{
+	int fd_socket;
+	struct sockaddr_in cliente;
+	struct sockaddr_in servidorAddr;
+	int rc;
+	char buffer[512],server[256];
+	socklen_t add_size;
+	add_size = sizeof cliente;
+	strcpy(server,ip_ingresada.c_str());
+	cout<<"IP ingresada"<<server<<endl;
+	fd_socket = socket(AF_INET,SOCK_DGRAM,0);
+	if(fd_socket < 0)
+	{
+		perror("Error en cuncion socket()");
+		return -1;
+	}
 	
-	}while(1);
+
+	inet_pton(AF_INET,server,&cliente.sin_addr.s_addr);
+	cliente.sin_family=AF_INET;
+	cliente.sin_port=htons (2432);
+
+	memset(&buffer,0,sizeof(buffer));
+	strcat(buffer,"AJR");//NombreProto
+	strcat(buffer,"2");//enviar bandera de Secuencias Buenas
+	strcat(buffer,nombreJugador.c_str());
+
+	for (int i = 0; i < (10-nombreJugador.length()); ++i)
+	{
+		strcat(buffer,"0");
+	}
+	char caracterSecuenciasBuenas = secuenciasCorrectas;
+	buffer[14]=caracterSecuenciasBuenas;
+	cout<<"BSBcreada:"<<buffer<<endl;
+	cout<<"Numero de secuencias enviadas:"<<buffer[14]<<":"<<(int)buffer[14]<<":"<<caracterSecuenciasBuenas<<":"<<endl;
+
+
+	sendto (fd_socket, buffer, strlen(buffer), 0, (struct sockaddr *) &cliente, sizeof (cliente));
+	
+	rc=recvfrom(fd_socket,buffer, TAM_BUFFER, 0, (struct sockaddr *) &servidorAddr,&add_size);
+	buffer[rc]='\0';	
+	cout<<"Esperando\n";
 	
 	
-	close(sockfd);
+	
+    if (rc<0)
+    {
+        perror("Error funcion recvfrom");
+        return -1;
+    }	
+	  
+	
+    
+
+    cout<<"Buffer recibido:"<<buffer<<endl;
+    int status;
+    status = verificar(buffer, fd_socket, &servidorAddr);    
+    if(rc<0)
+    {
+
+        perror("Error funcion sendto");
+        return -1;
+    }
+ 
+    if(fd_socket!=-1)
+    {
+        close(fd_socket);
+    }
+    return status;
+
 }

@@ -7,7 +7,6 @@ int main(int argc, char const *argv[])
     ventanaPartida = new VentanaPartida;
     ventanaPartida->obtenerNombreDeJugador();
     ventanaPartida->obtenerNombreDeOponente();
-    ventanaPartida->obtenerSecuencias();
     ventanaPartida->mostrarVentanaIniciar();
 	return 0;
 }

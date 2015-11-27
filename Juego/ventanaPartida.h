@@ -9,6 +9,7 @@
 #include <cstring>
 #include <sstream>
 /*Librerias para red*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <netdb.h>
@@ -17,8 +18,8 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-#include <sys/poll.h>
-#include <sys/time.h>
+#include <fcntl.h>
+
 /*---------------*/
 #define VENTANAPOS_X 100 
 #define VENTANAPOS_Y 100
@@ -26,6 +27,7 @@
 #define ALTO_PANTALLA_PART 480
 #define SECUENCIAS_MAXIMAS 15
 #define COLUMNAS_MAXIMAS 9
+#define TAM_BUFFER 200
 using namespace std;
 
 enum
@@ -34,6 +36,8 @@ enum
 	FONT_MADERITA,
 	FONT_BOMBA,
 	FONT_ORANGE_JUICE,
+	FONT_PACIFICO,
+	FONT_ORANGE_JUICE_PEQUE,
 	TOTAL_FONTS
 };
 
@@ -69,6 +73,8 @@ enum
 	BOTON_CONECTAR,
 	BOTON_CONECTAR_PRESIONADO,
 	LINEA,
+	FONDO_ESPERANDO,
+	COPA,
 	TOTAL
 };
 
@@ -103,6 +109,13 @@ enum
 	POSICION_INSTRUCCION_NOMBRE,
 	POSICION_IP,
 	POSICION_PUERTO,
+	POSICION_INGRESA_IP,
+	POSICION_INGRESA_PUERTO,
+	POSICION_ESPERANDO,
+	POSICION_COPA,
+	POSICION_MOTIVO_ESPERANDO,
+	POSICION_GANADOR,
+	POSICION_PUNTAJE_GANADOR,
 	TOTAL_POSICIONES
 };
 enum
@@ -114,6 +127,11 @@ enum
 	TEXTO_INGRESO,
 	TEXTO_IP,
 	TEXTO_PUERTO,
+	TEXTO_INGRESA_PUERTO,
+	TEXTO_INGRESA_IP,
+	TEXTO_MOTIVO_ESPERANDO,
+	TEXTO_GANADOR,
+	TEXTO_PUNTAJE_GANADOR,
 	TOTAL_TEXTOS
 };
 
@@ -125,6 +143,8 @@ private:
 	string cadena_puerto;
 	string nombreJugador;
 	string nombreOponente;
+	string nombreGanador;
+	int puntajeGanador;
 	SDL_Window *ventanaJuego;
 	SDL_Window *ventanaIniciar;
 	SDL_Window *ventanaPrincipal;
@@ -149,6 +169,7 @@ private:
 public:
 	VentanaPartida();
 	VentanaPartida(string nombreJ, string nombreO, int secs[][COLUMNAS_MAXIMAS]);
+	int pintadoActual;
 	bool inicializar();
 	void cerrar();
 	bool cargarImagenes();
@@ -161,20 +182,22 @@ public:
 	bool cargarFuentes();
 	void pintarSecuenciasBuenas(int secuenciasBuenas);
 	void pintarVidasRestantes(int vidasRestantes);
-	int jugar();
 	void repintarVentanaJuego();
 	void pintarVentanaJuego();
 	void pintarVentanaIniciar();
 	void pintarVentanaPrincipal();
-	void obtenerSecuencias();
+	void pintarVentanaEsperar(int opcionDeTexto);
+	void pintarVentanaResultados();
 	void obtenerNombreDeJugador();
 	void obtenerNombreDeOponente();
 	void mostrarVentanaIniciar();
-	void mostrarVentanaPrincipal();
 	void pintarNombreEnVentanaPrincipal();
 	void pintarIpIngresadaEnVentanaPrincipal();
 	void pintarPuertoIngresadoEnVentanaPrincipal();	
-	void conectar();
+	int mandarBCC();
+	int mandarBSB();
+	int verificar(char *mensaje,int sd, struct sockaddr_in* servidorAddr);
+
 };
 
 #endif /*__VENTANAPARTIDA_H*/

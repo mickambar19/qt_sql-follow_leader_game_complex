@@ -229,6 +229,6 @@ void VentanaPrincipal::clickEnOpcionJugar(){
     ventanaPartida = new VentanaPartida(nom,opon,numeros);
     cout<<"qui estas2"<<endl;
     //ventanaPartida(nom,opon,numeros);
-   ventanaPartida->jugar();
+   //ventanaPartida->jugar();
 
 }

@@ -1,0 +1,160 @@
+/cl//
+//  main.cpp
+//  Juego
+//
+//  Created by Rob's on 10/11/15.
+//  Copyright (c) 2015 Durán Parra José Roberto. All rights reserved.
+//
+
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <iostream>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <cstring>
+#include <string>
+#include <arpa/inet.h>
+#include "Dijkstra.h"
+
+using namespace std;
+
+int main()
+{
+       cout << "\t Algoritmo de Dijkstra*** " << endl;
+    
+    Dijkstra G;
+    G.cont = 0;
+    G.ObtenerGrafo();
+    G.Alg_Dijkstra();
+    G.Mostrar();
+    char opc = 0;
+    
+    while (opc < 15)
+    {
+            G.inicio = rand () % 9 + 1;
+            G.fin = rand () % 9 + 1;
+            
+            while (G.fin == G.inicio)
+            {
+                cout << endl << "El nodo fue igual" << endl;
+                G.fin = rand () % 9 +1;
+            }
+            
+            cout << "Nodo de inicio: " << G.inicio << endl;
+            cout << "Nodo de fin: " << G.fin << endl;
+            cout << endl;
+            
+            G.inicio -= 1; G.fin -= 1;
+            
+            G.Alg_Dijkstra();
+            G.Mostrar();
+        
+        opc++;
+    }
+    
+    cout << endl << "chico banderas: " << endl;
+    
+    for (int i = 0; i < G.cont; i++){
+        cout << (int)G.secuencia[i] << " ";
+        cout<<":"<<i<<":"<<endl;
+    }
+    /**/
+    int s;
+    int res;
+    struct sockaddr_in serv,infoCliente;
+    int cliente;
+    memset(&serv,0,sizeof(serv));
+    memset(&infoCliente,0,sizeof(infoCliente));
+    // s es igual al descriptor de archivo aqui se crea
+    s=socket(AF_INET,SOCK_STREAM,0); 
+    serv.sin_port = htons(12222); //se asocia al puerto
+    serv.sin_family = AF_INET;   // a la familia de direcciones IPv4
+    //  serv.sin_addr.s_addr =  htonl(2130706433); // se relaciona con una direccion
+    serv.sin_addr.s_addr = INADDR_ANY;
+    res = bind(s,(struct sockaddr*)&serv,sizeof(struct sockaddr_in));
+
+    if(res < 0)
+    {
+        perror("Esto ocurrio:");
+    }
+    
+    res = listen(s,10);
+    socklen_t clilen;
+    clilen = sizeof(infoCliente);
+    int clientesAceptados=0;
+    int descriptores[2];
+    while(1){
+
+
+        cliente = accept(s,(struct sockaddr*)&infoCliente,&clilen); 
+        if(cliente > -1)
+        {
+            descriptores[clientesAceptados] = cliente;
+            clientesAceptados ++;
+        }
+        if(clientesAceptados == 2)
+        {
+            break;
+        }
+    }
+    
+    
+        
+    char paqueteAJR1[200];
+    char paqueteAJR2[200];
+    char cabeceraPrincipal[24];
+    //char nombreProtocolo[3]="JAR";
+    
+    read(descriptores[0],paqueteAJR1,sizeof(paqueteAJR1));
+    read(descriptores[1],paqueteAJR2,sizeof(paqueteAJR2));
+    cout<<"paqueteAJR1con:"<<paqueteAJR1<<endl<<endl;
+    cout<<"paqueteAJR2con:"<<paqueteAJR2<<endl<<endl;
+
+
+    if(paqueteAJR1[3]=='1' && paqueteAJR2[3]=='1')
+    {
+        /*Copiar los nombres*/
+        strncpy(cabeceraPrincipal,paqueteAJR1,24);
+        cout<<"CabeceraPrincipal1:"<<cabeceraPrincipal<<endl;
+        strncpy(paqueteAJR1,paqueteAJR2,24);
+        strncpy(paqueteAJR2,cabeceraPrincipal,24);
+        cout<<"paqueteAJR1"<<paqueteAJR1<<endl;
+        cout<<"paqueteAJR2"<<paqueteAJR2<<endl;
+        /*Copiar secuencias*/
+        int contSecundario =0;
+        cout<<"\n\nTesteo:\n";
+        for (int i = 24; i < G.cont+24; ++i)
+        {
+
+            paqueteAJR1[i]=G.secuencia[contSecundario];
+            paqueteAJR2[i]=G.secuencia[contSecundario];
+            cout<<(int)paqueteAJR2[i]<<":";
+            contSecundario++;
+        }
+
+        cout<<"\npaqueteAJR1conSecuencias:"<<paqueteAJR1<<endl<<endl;
+        cout<<"paqueteAJR2conSecuencias:"<<paqueteAJR2<<endl<<endl;
+        write(descriptores[0],paqueteAJR1,sizeof(paqueteAJR1)); 
+        write(descriptores[1],paqueteAJR2,sizeof(paqueteAJR2));     
+    }
+    
+    char *ipDeInfoCliente;
+    /*ipDeInfoCliente= inet_ntoa(infoCliente.sin_addr);
+    cout<<"LA ip del cliente es:"<<ipDeInfoCliente<<endl;
+    
+    cout<<"El puerto de cliente es l:"<<ntohs(infoCliente.sin_port)<<endl;
+*/
+    for (int i = 0; i < 2; ++i)
+    {
+        close(descriptores[i]);
+    }
+        
+    close(s);
+
+    
+    return 0;
+}
